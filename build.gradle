@@ -18,6 +18,10 @@ buildscript {
         // Kotlin version
         kotlinVersion = "1.1.51"
 
+        // Java compatibility version
+        sourceCompatJavaVersion = JavaVersion.VERSION_1_7
+        targetCompatJavaVersion = JavaVersion.VERSION_1_7
+
         // Libraries versions
         junitVersion = "4.12"
         espressoVersion = "2.2.2"

@@ -1,4 +1,4 @@
-apply plugin: "com.android.application"
+apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
 android {
@@ -6,8 +6,6 @@ android {
     buildToolsVersion buildTools
 
     defaultConfig {
-        applicationId "com.github.rozag.redux"
-
         minSdkVersion minSdk
         targetSdkVersion targetSdk
 
@@ -18,23 +16,8 @@ android {
     }
 
     buildTypes {
-        debug {
-            minifyEnabled false
-            debuggable true
-            jniDebuggable true
-            renderscriptDebuggable true
-            pseudoLocalesEnabled false
-            zipAlignEnabled true
-            applicationIdSuffix ".debug"
-        }
-
         release {
-            minifyEnabled true
-            debuggable false
-            jniDebuggable false
-            renderscriptDebuggable false
-            pseudoLocalesEnabled false
-            zipAlignEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
@@ -76,17 +59,6 @@ dependencies {
     // JUnit testing dependencies
     testImplementation "junit:junit:${junitVersion}"
 
-    // Android testing dependencies
-    androidTestImplementation "junit:junit:${junitVersion}"
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:${espressoVersion}", {
-        exclude group: "com.android.support", module: "support-annotations"
-    })
-
     // Kotlin specific dependencies
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
-
-    // Android support library
-    implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
-
-    // Your dependencies go here...
 }

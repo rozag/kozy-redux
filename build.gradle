@@ -15,22 +15,28 @@ buildscript {
         compileSdk = 26
         targetSdk = 26
 
-        // Kotlin version
-        kotlinVersion = "1.1.51"
+        // Kotlin stuff versions
+        kotlinVersion = "1.2.0-rc-39"
+        coroutinesVersion = "0.19.3"
 
         // Java compatibility version
         sourceCompatJavaVersion = JavaVersion.VERSION_1_7
         targetCompatJavaVersion = JavaVersion.VERSION_1_7
 
-        // Libraries versions
+        // Testing stuff versions
         junitVersion = "4.12"
+        mockitoVersion = "1.10.19"
+        mockitoKotlinVersion = "1.5.0"
         espressoVersion = "2.2.2"
-        supportLibraryVersion = "25.3.1"
+
+        // Libraries versions
+        supportLibraryVersion = "27.0.0"
     }
 
     repositories {
         jcenter()
-        mavenCentral()
+        google()
+        maven { url = "http://dl.bintray.com/kotlin/kotlin-eap-1.2" }
     }
 
     dependencies {
@@ -42,7 +48,8 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        mavenCentral()
+        google()
+        maven { url = "http://dl.bintray.com/kotlin/kotlin-eap-1.2" }
     }
 }
 

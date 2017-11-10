@@ -1,1 +1,1 @@
-include ':app', ':libcoroutines', ':libcore'
+include ':simple-counter-coroutines', ':libcoroutines', ':libcore'

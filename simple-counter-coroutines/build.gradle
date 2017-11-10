@@ -6,7 +6,7 @@ android {
     buildToolsVersion buildTools
 
     defaultConfig {
-        applicationId "com.github.rozag.redux"
+        applicationId "com.github.rozag.redux.counter"
 
         minSdkVersion minSdk
         targetSdkVersion targetSdk
@@ -72,21 +72,23 @@ android {
     }
 }
 
-dependencies {
-    // JUnit testing dependencies
-    testImplementation "junit:junit:${junitVersion}"
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
 
-    // Android testing dependencies
-    androidTestImplementation "junit:junit:${junitVersion}"
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:${espressoVersion}", {
-        exclude group: "com.android.support", module: "support-annotations"
-    })
+dependencies {
+    implementation project(":libcore")
+    implementation project(":libcoroutines")
 
     // Kotlin specific dependencies
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutinesVersion}"
 
     // Android support library
     implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
 
-    // Your dependencies go here...
+    // Anko
+    implementation "org.jetbrains.anko:anko-coroutines:${ankoVersion}"
 }

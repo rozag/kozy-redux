@@ -8,7 +8,7 @@ interface SubscribableStore<S : State, A : Action> : Store<S, A> {
 
     fun subscribe(subscriber: Subscriber<S>): Connection
 
-    interface Subscriber<in S> : (S) -> Unit {
+    interface Subscriber<in S> {
         fun onNewState(state: S)
     }
 

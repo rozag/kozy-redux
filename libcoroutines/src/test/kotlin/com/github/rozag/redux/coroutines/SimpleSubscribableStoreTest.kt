@@ -9,6 +9,8 @@ import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.experimental.EmptyCoroutineContext
 
 @Suppress("FunctionName")
 class SimpleSubscribableStoreTest {
@@ -16,18 +18,29 @@ class SimpleSubscribableStoreTest {
     private data class TestAction(val number: Int) : Action
     private data class TestState(val number: Int) : State
 
+//    private val coroutineContext: CoroutineContext = newSingleThreadContext("Test")
+    private val coroutineContext: CoroutineContext = EmptyCoroutineContext
+
     private val initialState = TestState(1)
     private val initialAction = TestAction(1)
     private val newState = TestState(2)
-    private val store = SimpleSubscribableStore<TestState, TestAction>(initialState) { _, _ -> newState }
+    private val store = SimpleSubscribableStore<TestState, TestAction>(
+            initialState,
+            { _, _ -> newState },
+            coroutineContext
+    )
 
     @Test
     fun actionDispatched_reducerReceivesAction() {
-        val store = SimpleSubscribableStore<TestState, TestAction>(initialState) { state, action ->
-            assertEquals(initialState, state)
-            assertEquals(initialAction, action)
-            state
-        }
+        val store = SimpleSubscribableStore<TestState, TestAction>(
+                initialState,
+                { state, action ->
+                    assertEquals(initialState, state)
+                    assertEquals(initialAction, action)
+                    state
+                },
+                coroutineContext
+        )
         store.dispatch(initialAction)
     }
 
@@ -35,6 +48,14 @@ class SimpleSubscribableStoreTest {
     fun actionDispatched_storeHasNewState() {
         store.dispatch(initialAction)
         assertEquals(newState, store.getState())
+    }
+
+    @Test
+    fun subscriberSubscribed_subscriberReceivesCurrentState() {
+        val subscriber = mock<SubscribableStore.Subscriber<TestState>>()
+        store.subscribe(subscriber)
+
+        verify(subscriber, times(1)).onNewState(initialState)
     }
 
     @Test
@@ -98,10 +119,14 @@ class SimpleSubscribableStoreTest {
 
     @Test
     fun actionDispatched_reducerReceivesStateChangedBySingleMiddleware() {
-        val store = SimpleSubscribableStore<TestState, TestAction>(initialState) { state, _ ->
-            assertEquals(newState, state)
-            state
-        }
+        val store = SimpleSubscribableStore<TestState, TestAction>(
+                initialState,
+                { state, _ ->
+                    assertEquals(newState, state)
+                    state
+                },
+                coroutineContext
+        )
 
         val middleware = mock<Middleware<TestState, TestAction>> {
             on { dispatch(initialState, initialAction) } doReturn newState
@@ -117,10 +142,14 @@ class SimpleSubscribableStoreTest {
         val stateTwo = TestState(2)
         val stateThree = TestState(3)
         val initialAction = TestAction(1)
-        val store = SimpleSubscribableStore<TestState, TestAction>(stateOne) { state, _ ->
-            assertEquals(stateThree, state)
-            state
-        }
+        val store = SimpleSubscribableStore<TestState, TestAction>(
+                stateOne,
+                { state, _ ->
+                    assertEquals(stateThree, state)
+                    state
+                },
+                coroutineContext
+        )
 
         val middlewareOne = mock<Middleware<TestState, TestAction>> {
             on { dispatch(stateOne, initialAction) } doReturn stateTwo

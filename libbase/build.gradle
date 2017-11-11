@@ -1,0 +1,17 @@
+apply plugin: "kotlin"
+
+dependencies {
+    // Core library
+    implementation project(":libcore")
+
+    // Testing dependencies
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+    testImplementation "com.nhaarman:mockito-kotlin:${mockitoKotlinVersion}"
+
+    // Kotlin specific dependencies
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${kotlinVersion}"
+}
+
+sourceCompatibility = sourceCompatJavaVersion
+targetCompatibility = targetCompatJavaVersion

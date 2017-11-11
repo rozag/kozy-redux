@@ -17,8 +17,6 @@ buildscript {
 
         // Kotlin stuff versions
         kotlinVersion = "1.2.0-rc-39"
-        coroutinesVersion = "0.19.3"
-        ankoVersion = "0.10.2"
 
         // Java compatibility version
         sourceCompatJavaVersion = JavaVersion.VERSION_1_7

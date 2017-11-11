@@ -1,6 +1,6 @@
 package com.github.rozag.redux.core
 
-interface Store<S : State, A : Action> {
+interface Store<out S : State, A : Action> {
 
     fun getState(): S
 

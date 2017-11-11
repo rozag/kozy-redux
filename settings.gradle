@@ -1,1 +1,1 @@
-include ':simple-counter-coroutines', ':libcoroutines', ':libcore'
+include ':sample-counter', ':libbase', ':libcore'

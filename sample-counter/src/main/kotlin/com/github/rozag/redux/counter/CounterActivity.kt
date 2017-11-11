@@ -18,6 +18,8 @@ class CounterActivity : AppCompatActivity(), SubscribableStore.Subscriber<Counte
 
     private lateinit var connection: SubscribableStore.Connection
 
+    private var isExiting = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_counter)
@@ -47,7 +49,16 @@ class CounterActivity : AppCompatActivity(), SubscribableStore.Subscriber<Counte
         connection.unsubscribe()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        isExiting = true
+        store.dispatch(CounterAction.TearDown())
+    }
+
     override fun onNewState(state: CounterState) {
+        if (isExiting) {
+            return
+        }
         counterTextView.text = state.count.toString()
     }
 

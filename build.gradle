@@ -16,7 +16,7 @@ buildscript {
         targetSdk = 26
 
         // Kotlin stuff versions
-        kotlinVersion = "1.2.0-rc-39"
+        kotlinVersion = "1.1.51"
 
         // Java compatibility version
         sourceCompatJavaVersion = JavaVersion.VERSION_1_7
@@ -35,7 +35,6 @@ buildscript {
     repositories {
         jcenter()
         google()
-        maven { url = "http://dl.bintray.com/kotlin/kotlin-eap-1.2" }
     }
 
     dependencies {
@@ -48,7 +47,6 @@ allprojects {
     repositories {
         jcenter()
         google()
-        maven { url = "http://dl.bintray.com/kotlin/kotlin-eap-1.2" }
     }
 }
 

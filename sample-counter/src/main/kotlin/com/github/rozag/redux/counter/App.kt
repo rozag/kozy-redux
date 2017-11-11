@@ -11,14 +11,14 @@ class App : Application() {
 
     companion object {
         val store: SubscribableStore<CounterState, CounterAction> = SimpleSubscribableStore(
-                CounterState.initialState,
+                CounterState.Initial,
                 ::rootReducer
         )
     }
 
     override fun onCreate() {
         super.onCreate()
-        store.dispatch(CounterAction.Init())
+        store.dispatch(CounterAction.SetUp())
     }
 
 }

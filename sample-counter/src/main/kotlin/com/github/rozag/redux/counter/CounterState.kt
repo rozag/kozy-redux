@@ -4,6 +4,6 @@ import com.github.rozag.redux.core.State
 
 data class CounterState(val count: Int) : State {
     companion object {
-        val initialState: CounterState = CounterState(0)
+        val Initial: CounterState = CounterState(0)
     }
 }

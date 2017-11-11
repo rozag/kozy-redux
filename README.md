@@ -1,5 +1,5 @@
 # kozy-redux
-Kotlin redux library for Android.
+Pure Kotlin redux library.
 
 ## TODO
 * More info

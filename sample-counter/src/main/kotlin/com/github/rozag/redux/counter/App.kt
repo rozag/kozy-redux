@@ -1,12 +1,11 @@
 package com.github.rozag.redux.counter
 
 import android.app.Application
+import android.util.Log
 import com.github.rozag.redux.base.SimpleSubscribableStore
 import com.github.rozag.redux.base.SubscribableStore
 
 class App : Application() {
-
-    // TODO: Add middleware
 
     companion object {
         val store: SubscribableStore<CounterState, CounterAction> = SimpleSubscribableStore(
@@ -17,7 +16,13 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        store.dispatch(CounterAction.SetUp())
+        store.apply {
+            applyMiddleware(
+                    LoggingMiddleware(Log.DEBUG, "DebugLogger"),
+                    LoggingMiddleware(Log.ERROR, "ErrorLogger")
+            )
+            dispatch(CounterAction.SetUp())
+        }
     }
 
 }

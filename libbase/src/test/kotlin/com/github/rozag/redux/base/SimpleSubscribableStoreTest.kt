@@ -3,6 +3,8 @@ package com.github.rozag.redux.base
 import com.github.rozag.redux.core.ReduxAction
 import com.github.rozag.redux.core.ReduxMiddleware
 import com.github.rozag.redux.core.ReduxState
+import com.github.rozag.redux.core.ReduxStore
+import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
@@ -18,7 +20,7 @@ class SimpleSubscribableStoreTest {
     private val initialState = TestState(1)
     private val initialAction = TestAction(1)
     private val newState = TestState(2)
-    private val store = SimpleSubscribableStore<TestState, TestAction>(initialState) { _, _ -> newState }
+    private val store: SubscribableStore<TestState, TestAction> = SimpleSubscribableStore(initialState) { _, _ -> newState }
 
     @Test
     fun actionDispatched_reducerReceivesAction() {
@@ -79,22 +81,37 @@ class SimpleSubscribableStoreTest {
 
     @Test
     fun actionDispatched_singleMiddlewareInvoked() {
-        val middleware = mock<ReduxMiddleware<TestState, TestAction>>()
+        val middleware = mock<ReduxMiddleware<TestState, TestAction, ReduxStore<TestState, TestAction>>>()
         store.applyMiddleware(middleware)
 
         store.dispatch(initialAction)
-        verify(middleware, times(1)).dispatch(initialState, initialAction)
+        verify(middleware, times(1)).doBeforeDispatch(store, initialAction)
     }
 
     @Test
     fun actionDispatched_severalMiddlewareInvoked() {
-        val middlewareOne = mock<ReduxMiddleware<TestState, TestAction>>()
-        val middlewareTwo = mock<ReduxMiddleware<TestState, TestAction>>()
+        val middlewareOne = mock<ReduxMiddleware<TestState, TestAction, ReduxStore<TestState, TestAction>>>()
+        val middlewareTwo = mock<ReduxMiddleware<TestState, TestAction, ReduxStore<TestState, TestAction>>>()
         store.applyMiddleware(middlewareOne, middlewareTwo)
 
         store.dispatch(initialAction)
-        verify(middlewareOne, times(1)).dispatch(initialState, initialAction)
-        verify(middlewareTwo, times(1)).dispatch(initialState, initialAction)
+        verify(middlewareOne, times(1)).doBeforeDispatch(store, initialAction)
+        verify(middlewareTwo, times(1)).doBeforeDispatch(store, initialAction)
+    }
+
+    @Test
+    fun actionDispatched_secondMiddlewareMethodsInvokedAroundTheFirstMiddlewareMethods() {
+        val middlewareOne = mock<ReduxMiddleware<TestState, TestAction, ReduxStore<TestState, TestAction>>>()
+        val middlewareTwo = mock<ReduxMiddleware<TestState, TestAction, ReduxStore<TestState, TestAction>>>()
+        store.applyMiddleware(middlewareOne, middlewareTwo)
+
+        val inOrder = inOrder(middlewareOne, middlewareTwo)
+
+        store.dispatch(initialAction)
+        inOrder.verify(middlewareTwo).doBeforeDispatch(store, initialAction)
+        inOrder.verify(middlewareOne).doBeforeDispatch(store, initialAction)
+        inOrder.verify(middlewareOne).doAfterDispatch(store, initialAction)
+        inOrder.verify(middlewareTwo).doAfterDispatch(store, initialAction)
     }
 
 }

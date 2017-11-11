@@ -1,4 +1,4 @@
-# redux-kit
+# kozy-redux
 Kotlin redux library for Android.
 
 ## TODO

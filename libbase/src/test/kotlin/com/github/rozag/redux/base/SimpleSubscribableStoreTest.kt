@@ -1,8 +1,8 @@
 package com.github.rozag.redux.base
 
-import com.github.rozag.redux.core.Action
-import com.github.rozag.redux.core.Middleware
-import com.github.rozag.redux.core.State
+import com.github.rozag.redux.core.ReduxAction
+import com.github.rozag.redux.core.ReduxMiddleware
+import com.github.rozag.redux.core.ReduxState
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
@@ -12,8 +12,8 @@ import org.junit.Test
 @Suppress("FunctionName")
 class SimpleSubscribableStoreTest {
 
-    private data class TestAction(val number: Int) : Action
-    private data class TestState(val number: Int) : State
+    private data class TestAction(val number: Int) : ReduxAction
+    private data class TestState(val number: Int) : ReduxState
 
     private val initialState = TestState(1)
     private val initialAction = TestAction(1)
@@ -79,7 +79,7 @@ class SimpleSubscribableStoreTest {
 
     @Test
     fun actionDispatched_singleMiddlewareInvoked() {
-        val middleware = mock<Middleware<TestState, TestAction>>()
+        val middleware = mock<ReduxMiddleware<TestState, TestAction>>()
         store.applyMiddleware(middleware)
 
         store.dispatch(initialAction)
@@ -88,8 +88,8 @@ class SimpleSubscribableStoreTest {
 
     @Test
     fun actionDispatched_severalMiddlewareInvoked() {
-        val middlewareOne = mock<Middleware<TestState, TestAction>>()
-        val middlewareTwo = mock<Middleware<TestState, TestAction>>()
+        val middlewareOne = mock<ReduxMiddleware<TestState, TestAction>>()
+        val middlewareTwo = mock<ReduxMiddleware<TestState, TestAction>>()
         store.applyMiddleware(middlewareOne, middlewareTwo)
 
         store.dispatch(initialAction)

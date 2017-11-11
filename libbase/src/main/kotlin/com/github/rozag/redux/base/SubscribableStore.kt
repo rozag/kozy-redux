@@ -1,10 +1,10 @@
 package com.github.rozag.redux.base
 
-import com.github.rozag.redux.core.Action
-import com.github.rozag.redux.core.State
-import com.github.rozag.redux.core.Store
+import com.github.rozag.redux.core.ReduxAction
+import com.github.rozag.redux.core.ReduxState
+import com.github.rozag.redux.core.ReduxStore
 
-interface SubscribableStore<out S : State, A : Action> : Store<S, A> {
+interface SubscribableStore<out S : ReduxState, A : ReduxAction> : ReduxStore<S, A> {
 
     fun subscribe(subscriber: Subscriber<S>): Connection
 

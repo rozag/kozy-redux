@@ -1,16 +1,16 @@
 package com.github.rozag.redux.base
 
-import com.github.rozag.redux.core.Action
-import com.github.rozag.redux.core.Middleware
-import com.github.rozag.redux.core.State
+import com.github.rozag.redux.core.ReduxAction
+import com.github.rozag.redux.core.ReduxMiddleware
+import com.github.rozag.redux.core.ReduxState
 
-class SimpleSubscribableStore<out S : State, A : Action>(
+class SimpleSubscribableStore<out S : ReduxState, A : ReduxAction>(
         private var state: S,
         private val reducer: (state: S, action: A) -> S
 ) : SubscribableStore<S, A> {
 
     private val subscriberList: MutableList<SubscribableStore.Subscriber<S>> = ArrayList()
-    private val middlewareList: MutableList<Middleware<S, A>> = ArrayList()
+    private val middlewareList: MutableList<ReduxMiddleware<S, A>> = ArrayList()
 
     override fun getState(): S = state
 
@@ -30,7 +30,7 @@ class SimpleSubscribableStore<out S : State, A : Action>(
         }
     }
 
-    override fun applyMiddleware(vararg middlewareArray: Middleware<S, A>) {
+    override fun applyMiddleware(vararg middlewareArray: ReduxMiddleware<S, A>) {
         middlewareList.addAll(middlewareArray)
     }
 

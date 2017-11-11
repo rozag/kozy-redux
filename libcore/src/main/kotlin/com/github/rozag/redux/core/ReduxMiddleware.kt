@@ -1,5 +1,5 @@
 package com.github.rozag.redux.core
 
-interface Middleware<in S : State, in A : Action> {
+interface ReduxMiddleware<in S : ReduxState, in A : ReduxAction> {
     fun dispatch(state: S, action: A)
 }

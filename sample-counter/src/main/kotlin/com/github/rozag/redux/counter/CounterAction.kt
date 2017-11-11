@@ -1,8 +1,8 @@
 package com.github.rozag.redux.counter
 
-import com.github.rozag.redux.core.Action
+import com.github.rozag.redux.core.ReduxAction
 
-sealed class CounterAction : Action {
+sealed class CounterAction : ReduxAction {
 
     class SetUp : CounterAction()
 

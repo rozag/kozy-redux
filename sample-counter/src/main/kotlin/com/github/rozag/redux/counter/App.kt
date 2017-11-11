@@ -7,7 +7,6 @@ import com.github.rozag.redux.base.SubscribableStore
 class App : Application() {
 
     // TODO: Add middleware
-    // TODO: Reset state on exit
 
     companion object {
         val store: SubscribableStore<CounterState, CounterAction> = SimpleSubscribableStore(

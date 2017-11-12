@@ -1,4 +1,5 @@
-![](logo/logo-kozy-redux.png)
+<img src="https://github.com/rozag/kozy-redux/blob/master/logo/logo-kozy-redux.png" width="512">
+
 Pure Kotlin redux library.
 
 ## TODO

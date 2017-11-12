@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
+import android.widget.SeekBar
 import android.widget.TextView
 import com.github.rozag.redux.base.ReduxBufferedSubscribableStore
 import com.github.rozag.redux.base.ReduxSubscribableStore
@@ -18,7 +19,7 @@ class CounterActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<C
     private lateinit var subtractOneButton: Button
     private lateinit var subtractTenButton: Button
     private lateinit var stateNumberTextView: TextView
-//    private lateinit var stateNumberSeekBar: SeekBar
+    private lateinit var stateNumberSeekBar: SeekBar
 
     private lateinit var connection: ReduxSubscribableStore.Connection
 
@@ -44,17 +45,17 @@ class CounterActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<C
 
         stateNumberTextView = findViewById(R.id.state_number_tv)
 
-//        stateNumberSeekBar = findViewById(R.id.state_number_sb)
-//        stateNumberSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-//            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-//                if (fromUser) {
-//                    store.dispatch(CounterAction.TimeTravel(progress))
-//                }
-//            }
-//
-//            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
-//            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
-//        })
+        stateNumberSeekBar = findViewById(R.id.state_number_sb)
+        stateNumberSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    store.jumpToState(progress)
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+        })
     }
 
     override fun onStart() {
@@ -79,15 +80,11 @@ class CounterActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<C
             return
         }
 
-        store.jumpToState(state.currentStateIndex)
-        val timeTravelAwareState: CounterState = store.getState()
-//        val timeTravelAwareState = state
+        counterTextView.text = state.count.toString()
 
-        counterTextView.text = timeTravelAwareState.count.toString()
-
-        stateNumberTextView.text = "${timeTravelAwareState.currentStateIndex + 1}/${timeTravelAwareState.totalStateCount}"
-//        stateNumberSeekBar.max = timeTravelAwareState.totalStateCount - 1
-//        stateNumberSeekBar.progress = timeTravelAwareState.currentStateIndex
+        stateNumberTextView.text = "${store.currentBufferPosition() + 1}/${store.currentBufferSize()}"
+        stateNumberSeekBar.max = store.currentBufferSize() - 1
+        stateNumberSeekBar.progress = store.currentBufferPosition()
     }
 
 }

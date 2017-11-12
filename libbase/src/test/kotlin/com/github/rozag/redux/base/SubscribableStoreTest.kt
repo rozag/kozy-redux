@@ -12,7 +12,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 @Suppress("FunctionName")
-class SimpleSubscribableStoreTest {
+class SubscribableStoreTest {
 
     private data class TestAction(val number: Int) : ReduxAction
     private data class TestState(val number: Int) : ReduxState
@@ -20,11 +20,11 @@ class SimpleSubscribableStoreTest {
     private val initialState = TestState(1)
     private val initialAction = TestAction(1)
     private val newState = TestState(2)
-    private val store: SubscribableStore<TestState, TestAction> = SimpleSubscribableStore(initialState) { _, _ -> newState }
+    private val store: ReduxSubscribableStore<TestState, TestAction> = SubscribableStore(initialState) { _, _ -> newState }
 
     @Test
     fun actionDispatched_reducerReceivesAction() {
-        val store = SimpleSubscribableStore<TestState, TestAction>(initialState) { state, action ->
+        val store = SubscribableStore<TestState, TestAction>(initialState) { state, action ->
             assertEquals(initialState, state)
             assertEquals(initialAction, action)
             state
@@ -40,7 +40,7 @@ class SimpleSubscribableStoreTest {
 
     @Test
     fun subscriberSubscribed_subscriberReceivesCurrentState() {
-        val subscriber = mock<SubscribableStore.Subscriber<TestState>>()
+        val subscriber = mock<ReduxSubscribableStore.Subscriber<TestState>>()
         store.subscribe(subscriber)
 
         verify(subscriber, times(1)).onNewState(initialState)
@@ -48,7 +48,7 @@ class SimpleSubscribableStoreTest {
 
     @Test
     fun actionDispatched_subscriberReceivesNewState() {
-        val subscriber = mock<SubscribableStore.Subscriber<TestState>>()
+        val subscriber = mock<ReduxSubscribableStore.Subscriber<TestState>>()
         store.subscribe(subscriber)
 
         store.dispatch(initialAction)
@@ -57,7 +57,7 @@ class SimpleSubscribableStoreTest {
 
     @Test
     fun actionDispatched_unsubscribedSubscriberNotInvoked() {
-        val subscriber = mock<SubscribableStore.Subscriber<TestState>>()
+        val subscriber = mock<ReduxSubscribableStore.Subscriber<TestState>>()
         val connection = store.subscribe(subscriber)
         connection.unsubscribe()
 
@@ -67,11 +67,11 @@ class SimpleSubscribableStoreTest {
 
     @Test
     fun actionDispatched_oneSubscriberInvokedWhileUnsubscribedOneNot() {
-        val subscriberOne = mock<SubscribableStore.Subscriber<TestState>>()
+        val subscriberOne = mock<ReduxSubscribableStore.Subscriber<TestState>>()
         val connectionOne = store.subscribe(subscriberOne)
         connectionOne.unsubscribe()
 
-        val subscriberTwo = mock<SubscribableStore.Subscriber<TestState>>()
+        val subscriberTwo = mock<ReduxSubscribableStore.Subscriber<TestState>>()
         store.subscribe(subscriberTwo)
 
         store.dispatch(initialAction)

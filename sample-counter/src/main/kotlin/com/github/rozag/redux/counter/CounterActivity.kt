@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import android.widget.TextView
-import com.github.rozag.redux.base.SubscribableStore
+import com.github.rozag.redux.base.ReduxSubscribableStore
 
-class CounterActivity : AppCompatActivity(), SubscribableStore.Subscriber<CounterState> {
+class CounterActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<CounterState> {
 
-    private val store: SubscribableStore<CounterState, CounterAction> = App.store
+    private val store: ReduxSubscribableStore<CounterState, CounterAction> = App.store
 
     private lateinit var counterTextView: TextView
     private lateinit var addOneButton: Button
@@ -16,7 +16,7 @@ class CounterActivity : AppCompatActivity(), SubscribableStore.Subscriber<Counte
     private lateinit var subtractOneButton: Button
     private lateinit var subtractTenButton: Button
 
-    private lateinit var connection: SubscribableStore.Connection
+    private lateinit var connection: ReduxSubscribableStore.Connection
 
     private var isExiting = false
 

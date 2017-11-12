@@ -21,9 +21,9 @@ open class SubscribableStoreTest {
 
     @Before
     open fun setUp() {
-        initialState = TestState(1)
-        initialAction = TestAction(1)
-        newState = TestState(2)
+        initialState = TestState(-2)
+        initialAction = TestAction(-1)
+        newState = TestState(-1)
         reducer = { _, _ -> newState }
         store = SubscribableStore(initialState, reducer)
     }

@@ -7,11 +7,11 @@ import com.github.rozag.redux.core.ReduxStore
 
 open class SubscribableStore<S : ReduxState, A : ReduxAction>(
         private var currentState: S,
-        private var reducer: (state: S, action: A) -> S
+        open var reducer: (state: S, action: A) -> S
 ) : ReduxSubscribableStore<S, A> {
 
-    private val subscriberList: MutableList<ReduxSubscribableStore.Subscriber<S>> = ArrayList()
-    private var dispatchFun: (A) -> Unit = { action: A ->
+    protected val subscriberList: MutableList<ReduxSubscribableStore.Subscriber<S>> = ArrayList()
+    protected open var dispatchFun: (A) -> Unit = { action: A ->
         // Apply the reducer graph
         currentState = reducer(currentState, action)
 
@@ -27,9 +27,7 @@ open class SubscribableStore<S : ReduxState, A : ReduxAction>(
         this.reducer = reducer
     }
 
-    override fun dispatch(action: A) {
-        dispatchFun(action)
-    }
+    override fun dispatch(action: A) = dispatchFun(action)
 
     override fun applyMiddleware(vararg middlewareList: ReduxMiddleware<S, A, ReduxStore<S, A>>) {
         middlewareList.forEach { middleware ->

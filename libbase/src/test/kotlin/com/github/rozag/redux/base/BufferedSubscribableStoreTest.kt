@@ -15,9 +15,9 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
 
     @Before
     override fun setUp() {
-        initialState = TestState(1)
-        initialAction = TestAction(1)
-        newState = TestState(2)
+        initialState = TestState(-2)
+        initialAction = TestAction(-1)
+        newState = TestState(-1)
         reducer = { _, _ -> newState }
         bufferedStore = BufferedSubscribableStore(initialBufferSizeLimit, initialState, reducer)
         store = bufferedStore
@@ -111,18 +111,35 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
         val states = Array(10) { index -> TestState(index) }
         val actions = Array(10) { index -> TestAction(index) }
 
-        bufferedStore.replaceReducer { state, action ->
-            val index = actions.indexOf(action)
-            if (index < 0) {
-                state
-            } else {
-                states[index]
-            }
+        bufferedStore.replaceReducer { _, action ->
+            states[actions.indexOf(action)]
         }
 
         for (i in 0..actions.lastIndex) {
             bufferedStore.dispatch(actions[i])
             assertEquals(states[i], bufferedStore.getState())
+        }
+    }
+
+    @Test
+    fun severalActionsDispatched_subscriberReceivesSameAsGetStateReturns() {
+        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+
+        val states = Array(10) { index -> TestState(index) }
+        val actions = Array(10) { index -> TestAction(index) }
+
+        bufferedStore.replaceReducer { _, action ->
+            states[actions.indexOf(action)]
+        }
+
+        bufferedStore.subscribe(object : ReduxSubscribableStore.Subscriber<TestState> {
+            override fun onNewState(state: TestState) {
+                assertEquals(state, bufferedStore.getState())
+            }
+        })
+
+        for (i in 0..actions.lastIndex) {
+            bufferedStore.dispatch(actions[i])
         }
     }
 
@@ -135,13 +152,8 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
         val states = Array(statesCount) { index -> TestState(index) }
         val actions = Array(statesCount) { index -> TestAction(index) }
 
-        bufferedStore.replaceReducer { state, action ->
-            val index = actions.indexOf(action)
-            if (index < 0) {
-                state
-            } else {
-                states[index]
-            }
+        bufferedStore.replaceReducer { _, action ->
+            states[actions.indexOf(action)]
         }
 
         for (i in 0..actions.lastIndex) {
@@ -159,20 +171,15 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
         val actions = Array(statesCount) { index -> TestAction(index) }
         val indices = IntArray(statesCount) { index -> index }.toMutableList()
 
-        bufferedStore.replaceReducer { state, action ->
-            val index = actions.indexOf(action)
-            if (index < 0) {
-                state
-            } else {
-                states[index]
-            }
+        bufferedStore.replaceReducer { _, action ->
+            states[actions.indexOf(action)]
         }
 
         for (i in 0..actions.lastIndex) {
             bufferedStore.dispatch(actions[i])
         }
 
-        assertEquals(statesCount + 1, bufferedStore.currentBufferSize()) // +1 because of initial state
+        assertEquals(statesCount + 1, bufferedStore.currentBufferSize()) // +1 because of the initial state
 
         Collections.shuffle(indices)
 

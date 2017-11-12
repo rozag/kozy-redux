@@ -6,10 +6,14 @@ import java.util.*
 
 open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
         private var bufferSizeLimit: Int,
-        currentState: S,
-        reducer: (state: S, action: A) -> S,
+        initialState: S,
+        override var reducer: (state: S, action: A) -> S,
         initialBufferSize: Int = 0
-) : SubscribableStore<S, A>(currentState, reducer), ReduxBufferedSubscribableStore<S, A> {
+) : SubscribableStore<S, A>(initialState, reducer), ReduxBufferedSubscribableStore<S, A> {
+
+    companion object {
+        const val UNLIMITED: Int = 0
+    }
 
     private var currentBufferPosition: Int = 0
     private val stateBuffer: MutableList<S> = ArrayList(when {
@@ -18,21 +22,29 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
         else -> 1
     })
 
-    init {
-        stateBuffer.add(currentState)
-    }
+    override var dispatchFun: (A) -> Unit = { action: A ->
+        // Apply the reducer graph
+        val newState = reducer(stateBuffer.last(), action)
 
-    override fun getState(): S = stateBuffer[currentBufferPosition]
-
-    override fun dispatch(action: A) {
-        super.dispatch(action)
+        // Handle the buffer
         val previousBufferSize = stateBuffer.size
-        stateBuffer.add(super.getState())
+        stateBuffer.add(newState)
         if (previousBufferSize == bufferSizeLimit) {
             stateBuffer.removeAt(0)
         }
-        currentBufferPosition = stateBuffer.size - 1
+        currentBufferPosition = stateBuffer.lastIndex
+
+        // Notify subscribers
+        subscriberList.forEach { subscriber ->
+            subscriber.onNewState(newState)
+        }
     }
+
+    init {
+        stateBuffer.add(initialState)
+    }
+
+    override fun getState(): S = stateBuffer[currentBufferPosition]
 
     override fun bufferSizeLimit(): Int = bufferSizeLimit
 
@@ -68,10 +80,6 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
 
     override fun jumpToLatestState() {
         jumpToState(stateBuffer.size - 1)
-    }
-
-    companion object {
-        const val UNLIMITED: Int = 0
     }
 
 }

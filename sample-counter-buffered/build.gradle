@@ -1,0 +1,84 @@
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+
+android {
+    compileSdkVersion compileSdk
+    buildToolsVersion buildTools
+
+    defaultConfig {
+        applicationId "com.github.rozag.redux.counter.buffered"
+
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
+
+        versionCode majorAppVersion * 10000 + minorAppVersion * 1000 + patchAppVersion * 100 + buildAppVersion
+        versionName "${majorAppVersion}.${minorAppVersion}.${patchAppVersion}"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+            pseudoLocalesEnabled false
+            zipAlignEnabled true
+            applicationIdSuffix ".debug"
+        }
+
+        release {
+            minifyEnabled true
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            pseudoLocalesEnabled false
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        }
+    }
+
+    lintOptions {
+        textReport true
+        textOutput "stdout"
+        fatal "UnusedResources"
+        warningsAsErrors true
+        abortOnError true
+    }
+
+    compileOptions {
+        sourceCompatibility sourceCompatJavaVersion
+        targetCompatibility targetCompatJavaVersion
+    }
+
+    packagingOptions {
+        exclude "META-INF/NOTICE"
+        exclude "META-INF/NOTICE.txt"
+        exclude "META-INF/LICENSE"
+        exclude "META-INF/LICENSE.txt"
+        exclude "META-INF/services/javax.annotation.processing.Processor"
+    }
+
+    dexOptions {
+        javaMaxHeapSize "3g"
+        jumboMode = true
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+        androidTest.java.srcDirs += "src/androidTest/kotlin"
+        test.java.srcDirs += "src/test/kotlin"
+    }
+}
+
+dependencies {
+    implementation project(':libcore')
+    implementation project(':libbase')
+
+    // Kotlin specific dependencies
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:${kotlinVersion}"
+
+    // Android support library
+    implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
+}

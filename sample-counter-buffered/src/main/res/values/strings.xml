@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">sample-counter-buffered</string>
+    <string name="add_one">Add 1</string>
+    <string name="add_ten">Add 10</string>
+    <string name="subtract_one">Subtract 1</string>
+    <string name="subtract_ten">Subtract 10</string>
+    <string name="state">State:</string>
+</resources>

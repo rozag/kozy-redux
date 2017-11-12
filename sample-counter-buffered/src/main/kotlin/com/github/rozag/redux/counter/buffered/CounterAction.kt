@@ -16,7 +16,7 @@ sealed class CounterAction : ReduxAction {
         }
     }
 
-    data class TimeTravel(val stateIndex: Int) : CounterAction()
+//    data class TimeTravel(val stateIndex: Int) : CounterAction()
 
     class TearDown : CounterAction()
 

@@ -11,12 +11,12 @@ fun rootReducer(state: CounterState, action: CounterAction): CounterState = when
                 state.bufferSizeLimit
         )
     }
-    is CounterAction.TimeTravel -> CounterState(
-            state.count,
-            action.stateIndex,
-            state.totalStateCount,
-            state.bufferSizeLimit
-    )
+//    is CounterAction.TimeTravel -> CounterState(
+//            state.count,
+//            action.stateIndex,
+//            state.totalStateCount,
+//            state.bufferSizeLimit
+//    )
     is CounterAction.TearDown -> CounterState.initial(App.BUFFER_SIZE_LIMIT)
 }
 

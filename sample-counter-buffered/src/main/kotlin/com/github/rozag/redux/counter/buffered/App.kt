@@ -19,10 +19,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        store.applyMiddleware(
-                LoggingMiddleware(Log.DEBUG, "DebugLogger"),
-                LoggingMiddleware(Log.ERROR, "ErrorLogger")
-        )
+        store.applyMiddleware(LoggingMiddleware(Log.DEBUG, "DebugLogger"))
     }
 
 }

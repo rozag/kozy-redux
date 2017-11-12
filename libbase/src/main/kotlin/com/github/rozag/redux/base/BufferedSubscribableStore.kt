@@ -6,7 +6,7 @@ import java.util.*
 
 open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
         private var bufferSizeLimit: Int,
-        initialState: S,
+        private val initialState: S,
         override var reducer: (state: S, action: A) -> S,
         initialBufferSize: Int = 0
 ) : SubscribableStore<S, A>(initialState, reducer), ReduxBufferedSubscribableStore<S, A> {
@@ -46,6 +46,21 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
 
     override fun getState(): S = stateBuffer[currentBufferPosition]
 
+    override fun subscribe(subscriber: ReduxSubscribableStore.Subscriber<S>): ReduxSubscribableStore.Connection {
+        // Add the subscriber to list
+        subscriberList.add(subscriber)
+
+        // Deliver the current state to the subscriber
+        subscriber.onNewState(getState())
+
+        // Return the connection
+        return object : ReduxSubscribableStore.Connection {
+            override fun unsubscribe() {
+                subscriberList.remove(subscriber)
+            }
+        }
+    }
+
     override fun bufferSizeLimit(): Int = bufferSizeLimit
 
     override fun changeSizeLimit(newSizeLimit: Int) {
@@ -64,6 +79,12 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
 
     override fun currentBufferPosition(): Int = currentBufferPosition
 
+    override fun clearBuffer() {
+        stateBuffer.clear()
+        stateBuffer.add(initialState)
+        currentBufferPosition = 0
+    }
+
     override fun jumpToState(position: Int) {
         currentBufferPosition = when {
             position < 0 -> throw IllegalArgumentException("Position $position is negative")
@@ -71,6 +92,12 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
                     "Position $position is larger than the last buffer's index (${stateBuffer.lastIndex})"
             )
             else -> position
+        }
+
+        // Notify subscribers
+        val newState = getState()
+        subscriberList.forEach { subscriber ->
+            subscriber.onNewState(newState)
         }
     }
 

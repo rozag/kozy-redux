@@ -10,6 +10,8 @@ interface ReduxBufferedStore<S : ReduxState, A : ReduxAction> : ReduxStore<S, A>
 
     fun currentBufferPosition(): Int
 
+    fun clearBuffer()
+
     fun jumpToState(position: Int)
 
     fun jumpToFirstState()

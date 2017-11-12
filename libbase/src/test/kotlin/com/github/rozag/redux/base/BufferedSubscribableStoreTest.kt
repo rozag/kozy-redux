@@ -1,5 +1,8 @@
 package com.github.rozag.redux.base
 
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.times
+import com.nhaarman.mockito_kotlin.verify
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -225,6 +228,49 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
         bufferedStore.jumpToFirstState()
         bufferedStore.dispatch(initialAction)
         assertEquals(bufferedStore.currentBufferSize() - 1, bufferedStore.currentBufferPosition())
+    }
+
+    @Test
+    fun subscriberSubscribed_subscriberReceivesLatestState() {
+        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+        bufferedStore.dispatch(initialAction)
+
+        val subscriber = mock<ReduxSubscribableStore.Subscriber<TestState>>()
+        bufferedStore.subscribe(subscriber)
+        verify(subscriber, times(1)).onNewState(newState)
+    }
+
+    @Test
+    fun jumpToStateInvoked_subscriberReceivesSelectedState() {
+        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+        bufferedStore.dispatch(initialAction)
+
+        val subscriber = mock<ReduxSubscribableStore.Subscriber<TestState>>()
+        bufferedStore.subscribe(subscriber)
+        verify(subscriber, times(1)).onNewState(newState)
+
+        bufferedStore.jumpToState(0)
+        verify(subscriber, times(1)).onNewState(initialState)
+    }
+
+    @Test
+    fun clearBufferInvoked_bufferSizeEqualsOne() {
+        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+        bufferedStore.dispatch(initialAction)
+        assertEquals(2, bufferedStore.currentBufferSize())
+
+        bufferedStore.clearBuffer()
+        assertEquals(1, bufferedStore.currentBufferSize())
+    }
+
+    @Test
+    fun clearBufferInvoked_getStateReturnsInitialState() {
+        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+        bufferedStore.dispatch(initialAction)
+        assertEquals(2, bufferedStore.currentBufferSize())
+
+        bufferedStore.clearBuffer()
+        assertEquals(initialState, bufferedStore.getState())
     }
 
 }

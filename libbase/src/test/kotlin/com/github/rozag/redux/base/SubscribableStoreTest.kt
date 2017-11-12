@@ -1,30 +1,36 @@
 package com.github.rozag.redux.base
 
-import com.github.rozag.redux.core.ReduxAction
 import com.github.rozag.redux.core.ReduxMiddleware
-import com.github.rozag.redux.core.ReduxState
 import com.github.rozag.redux.core.ReduxStore
 import com.nhaarman.mockito_kotlin.inOrder
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 
 @Suppress("FunctionName")
-class SubscribableStoreTest {
+open class SubscribableStoreTest {
 
-    private data class TestAction(val number: Int) : ReduxAction
-    private data class TestState(val number: Int) : ReduxState
+    protected lateinit var initialState: TestState
+    protected lateinit var initialAction: TestAction
+    protected lateinit var newState: TestState
+    protected lateinit var reducer: (TestState, TestAction) -> TestState
+    protected lateinit var store: ReduxSubscribableStore<TestState, TestAction>
 
-    private val initialState = TestState(1)
-    private val initialAction = TestAction(1)
-    private val newState = TestState(2)
-    private val store: ReduxSubscribableStore<TestState, TestAction> = SubscribableStore(initialState) { _, _ -> newState }
+    @Before
+    open fun setUp() {
+        initialState = TestState(1)
+        initialAction = TestAction(1)
+        newState = TestState(2)
+        reducer = { _, _ -> newState }
+        store = SubscribableStore(initialState, reducer)
+    }
 
     @Test
     fun actionDispatched_reducerReceivesAction() {
-        val store = SubscribableStore<TestState, TestAction>(initialState) { state, action ->
+        store.replaceReducer { state: TestState, action: TestAction ->
             assertEquals(initialState, state)
             assertEquals(initialAction, action)
             state

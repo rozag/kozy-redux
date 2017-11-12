@@ -5,23 +5,27 @@ import com.github.rozag.redux.core.ReduxMiddleware
 import com.github.rozag.redux.core.ReduxState
 import com.github.rozag.redux.core.ReduxStore
 
-class SubscribableStore<S : ReduxState, A : ReduxAction>(
-        private var state: S,
-        private val reducer: (state: S, action: A) -> S
+open class SubscribableStore<S : ReduxState, A : ReduxAction>(
+        private var currentState: S,
+        private var reducer: (state: S, action: A) -> S
 ) : ReduxSubscribableStore<S, A> {
 
     private val subscriberList: MutableList<ReduxSubscribableStore.Subscriber<S>> = ArrayList()
     private var dispatchFun: (A) -> Unit = { action: A ->
         // Apply the reducer graph
-        state = reducer(state, action)
+        currentState = reducer(currentState, action)
 
         // Notify subscribers
         subscriberList.forEach { subscriber ->
-            subscriber.onNewState(state)
+            subscriber.onNewState(currentState)
         }
     }
 
-    override fun getState(): S = state
+    override fun getState(): S = currentState
+
+    override fun replaceReducer(reducer: (state: S, action: A) -> S) {
+        this.reducer = reducer
+    }
 
     override fun dispatch(action: A) {
         dispatchFun(action)
@@ -38,7 +42,7 @@ class SubscribableStore<S : ReduxState, A : ReduxAction>(
         subscriberList.add(subscriber)
 
         // Deliver the current state to the subscriber
-        subscriber.onNewState(state)
+        subscriber.onNewState(currentState)
 
         // Return the connection
         return object : ReduxSubscribableStore.Connection {

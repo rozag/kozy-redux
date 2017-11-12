@@ -1,4 +1,4 @@
-# kozy-redux
+![](logo/logo-kozy-redux.png)
 Pure Kotlin redux library.
 
 ## TODO

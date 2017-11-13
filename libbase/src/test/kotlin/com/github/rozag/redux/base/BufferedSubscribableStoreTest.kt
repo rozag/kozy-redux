@@ -193,29 +193,6 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
     }
 
     @Test
-    fun jumpToLatestStateInvoked_getStateReturnsInitialState() {
-        bufferedStore.changeSizeLimit(2)
-        bufferedStore.dispatch(initialAction)
-        assertEquals(newState, bufferedStore.getState())
-
-        bufferedStore.jumpToFirstState()
-        assertEquals(initialState, bufferedStore.getState())
-    }
-
-    @Test
-    fun jumpToLatestStateInvoked_getStateReturnsLatestState() {
-        bufferedStore.changeSizeLimit(2)
-        bufferedStore.dispatch(initialAction)
-        assertEquals(newState, bufferedStore.getState())
-
-        bufferedStore.jumpToState(0)
-        assertEquals(initialState, bufferedStore.getState())
-
-        bufferedStore.jumpToLatestState()
-        assertEquals(newState, bufferedStore.getState())
-    }
-
-    @Test
     fun actionDispatchedWhileCurrentPositionPointingToTheEndOfBuffer_currentBufferPositionReturnsTheLastIndex() {
         bufferedStore.changeSizeLimit(2)
         bufferedStore.dispatch(initialAction)
@@ -225,7 +202,7 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
     @Test
     fun actionDispatchedWhileCurrentPositionPointingToTheBeginningOfBuffer_currentBufferPositionReturnsTheLastIndex() {
         bufferedStore.changeSizeLimit(2)
-        bufferedStore.jumpToFirstState()
+        bufferedStore.jumpToState(0)
         bufferedStore.dispatch(initialAction)
         assertEquals(bufferedStore.currentBufferSize() - 1, bufferedStore.currentBufferPosition())
     }

@@ -14,8 +14,4 @@ interface ReduxBufferedStore<S : ReduxState, A : ReduxAction> : ReduxStore<S, A>
 
     fun jumpToState(position: Int)
 
-    fun jumpToFirstState()
-
-    fun jumpToLatestState()
-
 }

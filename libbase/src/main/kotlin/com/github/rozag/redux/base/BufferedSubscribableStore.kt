@@ -101,12 +101,4 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
         }
     }
 
-    override fun jumpToFirstState() {
-        jumpToState(0)
-    }
-
-    override fun jumpToLatestState() {
-        jumpToState(stateBuffer.size - 1)
-    }
-
 }

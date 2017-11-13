@@ -20,6 +20,7 @@ class CounterActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<C
     private lateinit var subtractTenButton: Button
     private lateinit var stateNumberTextView: TextView
     private lateinit var stateNumberSeekBar: SeekBar
+    private lateinit var resetToThisStateButton: Button
 
     private lateinit var connection: ReduxSubscribableStore.Connection
 
@@ -56,6 +57,9 @@ class CounterActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<C
             override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
             override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
         })
+
+        resetToThisStateButton = findViewById(R.id.reset_to_this_state_btn)
+        resetToThisStateButton.setOnClickListener { store.resetToState(store.currentBufferPosition()) }
     }
 
     override fun onStart() {

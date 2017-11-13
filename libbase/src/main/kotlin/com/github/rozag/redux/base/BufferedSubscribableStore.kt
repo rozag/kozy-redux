@@ -67,16 +67,25 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
         currentBufferPosition = 0
     }
 
-    override fun jumpToState(position: Int) {
-        currentBufferPosition = when {
-            position < 0 -> throw IllegalArgumentException("Position $position is negative")
-            position > stateBuffer.lastIndex -> throw IllegalArgumentException(
-                    "Position $position is larger than the last buffer's index (${stateBuffer.lastIndex})"
-            )
-            else -> position
+    private fun rangeCheck(position: Int) {
+        val bufferSize = stateBuffer.size
+        if (position < 0 || position >= bufferSize) {
+            throw IllegalArgumentException("Index: $position, Size: $bufferSize")
         }
+    }
 
+    override fun jumpToState(position: Int) {
+        rangeCheck(position)
+        currentBufferPosition = position
         notifySubscribers()
+    }
+
+    override fun resetToState(position: Int) {
+        rangeCheck(position)
+        for (i in stateBuffer.lastIndex downTo position + 1) {
+            stateBuffer.removeAt(i)
+        }
+        jumpToState(position)
     }
 
 }

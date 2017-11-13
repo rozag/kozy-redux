@@ -250,4 +250,86 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
         assertEquals(initialState, bufferedStore.getState())
     }
 
+    @Test(expected = IllegalArgumentException::class)
+    fun resetToNegativeStatePosition_exceptionThrown() {
+        bufferedStore.resetToState(-1)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun resetToStatePositionLargerThanLastBufferIndex_exceptionThrown() {
+        bufferedStore.resetToState(bufferedStore.currentBufferSize())
+    }
+
+    @Test
+    fun resetToStateInvokedWithLastIndex_bufferSizeNotChanged() {
+        bufferedStore.changeSizeLimit(2)
+        bufferedStore.dispatch(initialAction)
+        bufferedStore.resetToState(bufferedStore.currentBufferSize() - 1)
+        assertEquals(2, bufferedStore.currentBufferSize())
+    }
+
+    @Test
+    fun resetToStateInvokedWithLastIndex_currentBufferPositionEqualsLastIndex() {
+        bufferedStore.changeSizeLimit(2)
+        bufferedStore.dispatch(initialAction)
+        val position = bufferedStore.currentBufferSize() - 1
+        bufferedStore.resetToState(position)
+        assertEquals(position, bufferedStore.currentBufferPosition())
+    }
+
+    @Test
+    fun resetToStateInvokedWithLastIndex_getStateReturnsLastState() {
+        bufferedStore.changeSizeLimit(2)
+        bufferedStore.dispatch(initialAction)
+        bufferedStore.resetToState(bufferedStore.currentBufferSize() - 1)
+        assertEquals(newState, bufferedStore.getState())
+    }
+
+    @Test
+    fun resetToStateInvoked_bufferSizeDecreased() {
+        bufferedStore.changeSizeLimit(2)
+        bufferedStore.dispatch(initialAction)
+        bufferedStore.resetToState(0)
+        assertEquals(1, bufferedStore.currentBufferSize())
+    }
+
+    @Test
+    fun resetToStateInvoked_currentBufferPositionEqualsNewIndex() {
+        bufferedStore.changeSizeLimit(2)
+        bufferedStore.dispatch(initialAction)
+        val position = 0
+        bufferedStore.resetToState(position)
+        assertEquals(position, bufferedStore.currentBufferPosition())
+    }
+
+    @Test
+    fun resetToStateInvoked_getStateReturnsCorrectState() {
+        bufferedStore.changeSizeLimit(2)
+        bufferedStore.dispatch(initialAction)
+        bufferedStore.resetToState(0)
+        assertEquals(initialState, bufferedStore.getState())
+    }
+
+    @Test
+    fun resetToStateInvoked_subscriberReceivesSelectedState() {
+        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+        bufferedStore.dispatch(initialAction)
+
+        val subscriber = mock<ReduxSubscribableStore.Subscriber<TestState>>()
+        bufferedStore.subscribe(subscriber)
+        verify(subscriber, times(1)).onNewState(newState)
+
+        bufferedStore.resetToState(0)
+        verify(subscriber, times(1)).onNewState(initialState)
+    }
+
+    @Test
+    fun resetToStateInvokedAfterStoreJumpedBack_bufferSizeChanges() {
+        bufferedStore.changeSizeLimit(2)
+        bufferedStore.dispatch(initialAction)
+        bufferedStore.jumpToState(0)
+        bufferedStore.resetToState(0)
+        assertEquals(1, bufferedStore.currentBufferSize())
+    }
+
 }

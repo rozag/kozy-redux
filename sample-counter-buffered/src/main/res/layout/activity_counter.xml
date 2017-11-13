@@ -104,6 +104,14 @@
                 tools:max="20"
                 tools:progress="10"/>
 
+            <Button
+                android:id="@+id/reset_to_this_state_btn"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/reset_to_this_state"/>
+
         </LinearLayout>
 
     </LinearLayout>

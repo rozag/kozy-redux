@@ -28,7 +28,7 @@ class TearDownMiddleware(
 
     override fun doAfterDispatch(store: ReduxStore<CounterState, CounterAction>, action: CounterAction) {
         if (action is CounterAction.TearDown) {
-            bufferedStore.clearBuffer()
+            bufferedStore.resetBuffer(CounterState.INITIAL)
         }
     }
 

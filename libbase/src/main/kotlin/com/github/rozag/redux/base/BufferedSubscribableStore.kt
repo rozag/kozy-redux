@@ -6,7 +6,7 @@ import java.util.*
 
 open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
         private var bufferSizeLimit: Int,
-        private val initialState: S,
+        initialState: S,
         override var reducer: (state: S, action: A) -> S,
         initialBufferSize: Int = 0
 ) : SubscribableStore<S, A>(initialState, reducer), ReduxBufferedSubscribableStore<S, A> {
@@ -79,7 +79,7 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
 
     override fun currentBufferPosition(): Int = currentBufferPosition
 
-    override fun clearBuffer() {
+    override fun resetBuffer(initialState: S) {
         stateBuffer.clear()
         stateBuffer.add(initialState)
         currentBufferPosition = 0

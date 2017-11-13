@@ -236,7 +236,7 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
         bufferedStore.dispatch(initialAction)
         assertEquals(2, bufferedStore.currentBufferSize())
 
-        bufferedStore.clearBuffer()
+        bufferedStore.resetBuffer(initialState)
         assertEquals(1, bufferedStore.currentBufferSize())
     }
 
@@ -246,7 +246,7 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
         bufferedStore.dispatch(initialAction)
         assertEquals(2, bufferedStore.currentBufferSize())
 
-        bufferedStore.clearBuffer()
+        bufferedStore.resetBuffer(initialState)
         assertEquals(initialState, bufferedStore.getState())
     }
 

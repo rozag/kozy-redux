@@ -10,7 +10,7 @@ interface ReduxBufferedStore<S : ReduxState, A : ReduxAction> : ReduxStore<S, A>
 
     fun currentBufferPosition(): Int
 
-    fun clearBuffer()
+    fun resetBuffer(initialState: S)
 
     fun jumpToState(position: Int)
 

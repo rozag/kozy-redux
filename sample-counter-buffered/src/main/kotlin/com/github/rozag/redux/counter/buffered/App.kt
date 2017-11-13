@@ -9,9 +9,9 @@ class App : Application() {
 
     companion object {
         val store: ReduxBufferedSubscribableStore<CounterState, CounterAction> = BufferedSubscribableStore(
-                20,
                 CounterState.INITIAL,
-                ::rootReducer
+                ::rootReducer,
+                20
         )
     }
 

@@ -22,7 +22,7 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
         initialAction = TestAction(-1)
         newState = TestState(-1)
         reducer = { _, _ -> newState }
-        bufferedStore = BufferedSubscribableStore(initialBufferSizeLimit, initialState, reducer)
+        bufferedStore = BufferedSubscribableStore(initialState, reducer, initialBufferSizeLimit)
         store = bufferedStore
     }
 

@@ -5,9 +5,9 @@ import com.github.rozag.redux.core.ReduxState
 import java.util.*
 
 open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
-        private var bufferSizeLimit: Int,
         initialState: S,
         override var reducer: (state: S, action: A) -> S,
+        private var bufferSizeLimit: Int = UNLIMITED,
         initialBufferSize: Int = 0
 ) : SubscribableStore<S, A>(initialState, reducer), ReduxBufferedSubscribableStore<S, A> {
 
@@ -22,7 +22,13 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
         else -> 1
     })
 
-    override var dispatchFun: (A) -> Unit = { action: A ->
+    init {
+        stateBuffer.add(initialState)
+    }
+
+    override fun getState(): S = stateBuffer[currentBufferPosition]
+
+    override fun internalDispatch(action: A) {
         // Apply the reducer graph
         val newState = reducer(stateBuffer.last(), action)
 
@@ -34,31 +40,7 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
         }
         currentBufferPosition = stateBuffer.lastIndex
 
-        // Notify subscribers
-        subscriberList.forEach { subscriber ->
-            subscriber.onNewState(newState)
-        }
-    }
-
-    init {
-        stateBuffer.add(initialState)
-    }
-
-    override fun getState(): S = stateBuffer[currentBufferPosition]
-
-    override fun subscribe(subscriber: ReduxSubscribableStore.Subscriber<S>): ReduxSubscribableStore.Connection {
-        // Add the subscriber to list
-        subscriberList.add(subscriber)
-
-        // Deliver the current state to the subscriber
-        subscriber.onNewState(getState())
-
-        // Return the connection
-        return object : ReduxSubscribableStore.Connection {
-            override fun unsubscribe() {
-                subscriberList.remove(subscriber)
-            }
-        }
+        notifySubscribers()
     }
 
     override fun bufferSizeLimit(): Int = bufferSizeLimit
@@ -94,11 +76,7 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
             else -> position
         }
 
-        // Notify subscribers
-        val newState = getState()
-        subscriberList.forEach { subscriber ->
-            subscriber.onNewState(newState)
-        }
+        notifySubscribers()
     }
 
 }

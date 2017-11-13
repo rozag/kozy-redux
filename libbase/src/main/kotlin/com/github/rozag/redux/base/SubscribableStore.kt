@@ -10,16 +10,8 @@ open class SubscribableStore<S : ReduxState, A : ReduxAction>(
         open var reducer: (state: S, action: A) -> S
 ) : ReduxSubscribableStore<S, A> {
 
-    protected val subscriberList: MutableList<ReduxSubscribableStore.Subscriber<S>> = ArrayList()
-    protected open var dispatchFun: (A) -> Unit = { action: A ->
-        // Apply the reducer graph
-        currentState = reducer(currentState, action)
-
-        // Notify subscribers
-        subscriberList.forEach { subscriber ->
-            subscriber.onNewState(currentState)
-        }
-    }
+    private val subscriberList: MutableList<ReduxSubscribableStore.Subscriber<S>> = ArrayList()
+    private var dispatchFun: (A) -> Unit = { action: A -> internalDispatch(action) }
 
     override fun getState(): S = currentState
 
@@ -28,6 +20,17 @@ open class SubscribableStore<S : ReduxState, A : ReduxAction>(
     }
 
     override fun dispatch(action: A) = dispatchFun(action)
+
+    protected open fun internalDispatch(action: A) {
+        currentState = reducer(currentState, action)
+        notifySubscribers()
+    }
+
+    protected fun notifySubscribers() {
+        subscriberList.forEach { subscriber ->
+            subscriber.onNewState(getState())
+        }
+    }
 
     override fun applyMiddleware(vararg middlewareList: ReduxMiddleware<S, A, ReduxStore<S, A>>) {
         middlewareList.forEach { middleware ->
@@ -40,7 +43,7 @@ open class SubscribableStore<S : ReduxState, A : ReduxAction>(
         subscriberList.add(subscriber)
 
         // Deliver the current state to the subscriber
-        subscriber.onNewState(currentState)
+        subscriber.onNewState(getState())
 
         // Return the connection
         return object : ReduxSubscribableStore.Connection {

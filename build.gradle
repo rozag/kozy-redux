@@ -16,7 +16,7 @@ buildscript {
         targetSdk = 26
 
         // Kotlin stuff versions
-        kotlinVersion = "1.1.51"
+        kotlinVersion = "1.1.60"
 
         // Java compatibility version
         sourceCompatJavaVersion = JavaVersion.VERSION_1_7

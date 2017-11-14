@@ -6,12 +6,11 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
-import com.github.rozag.redux.base.ReduxBufferedSubscribableStore
 import com.github.rozag.redux.base.ReduxSubscribableStore
 
 class CounterActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<CounterState> {
 
-    private val store: ReduxBufferedSubscribableStore<CounterState, CounterAction> = App.store
+    private val store: CounterStore = App.store
 
     private lateinit var counterTextView: TextView
     private lateinit var addOneButton: Button

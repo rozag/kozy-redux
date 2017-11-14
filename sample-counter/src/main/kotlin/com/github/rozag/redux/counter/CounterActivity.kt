@@ -8,7 +8,7 @@ import com.github.rozag.redux.base.ReduxSubscribableStore
 
 class CounterActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<CounterState> {
 
-    private val store: ReduxSubscribableStore<CounterState, CounterAction> = App.store
+    private val store: CounterStore = App.store
 
     private lateinit var counterTextView: TextView
     private lateinit var addOneButton: Button

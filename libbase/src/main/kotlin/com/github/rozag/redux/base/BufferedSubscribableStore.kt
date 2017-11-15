@@ -1,9 +1,24 @@
 package com.github.rozag.redux.base
 
 import com.github.rozag.redux.core.ReduxAction
+import com.github.rozag.redux.core.ReduxBufferedStore
 import com.github.rozag.redux.core.ReduxState
 import java.util.*
 
+/**
+ * An implementation of [ReduxBufferedSubscribableStore] interface. It can do all the
+ * things that [SubscribableStore] can, but this class also keeps a buffer of a limited
+ * number of previous states (or all of them) and allows you to manipulate this buffer
+ * via the [ReduxBufferedStore]'s methods.
+ *
+ * The usage of this store is the same as the [SubscribableStore]'s, but now you can
+ * also manipulate the state history.
+ *
+ * @param S the type of your [ReduxState]
+ * @param A the type of your root [ReduxAction]
+ * @property bufferSizeLimit the limit for the state buffer size
+ * @constructor creates new [BufferedSubscribableStore]
+ */
 open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
         initialState: S,
         override var reducer: (state: S, action: A) -> S,
@@ -12,6 +27,9 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
 ) : SubscribableStore<S, A>(initialState, reducer), ReduxBufferedSubscribableStore<S, A> {
 
     companion object {
+        /**
+         * Do not limit the state buffer size.
+         */
         const val UNLIMITED: Int = 0
     }
 
@@ -66,6 +84,8 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
         stateBuffer.add(initialState)
         currentBufferPosition = 0
     }
+
+    override fun buffer(): List<ReduxState> = stateBuffer.toList()
 
     private fun rangeCheck(position: Int) {
         val bufferSize = stateBuffer.size

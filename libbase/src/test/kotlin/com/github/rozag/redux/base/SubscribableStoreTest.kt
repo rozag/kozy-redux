@@ -65,7 +65,7 @@ open class SubscribableStoreTest {
     fun actionDispatched_unsubscribedSubscriberNotInvoked() {
         val subscriber = mock<ReduxSubscribableStore.Subscriber<TestState>>()
         val connection = store.subscribe(subscriber)
-        connection.unsubscribe()
+        connection.cancel()
 
         store.dispatch(initialAction)
         verify(subscriber, times(0)).onNewState(newState)
@@ -75,7 +75,7 @@ open class SubscribableStoreTest {
     fun actionDispatched_oneSubscriberInvokedWhileUnsubscribedOneNot() {
         val subscriberOne = mock<ReduxSubscribableStore.Subscriber<TestState>>()
         val connectionOne = store.subscribe(subscriberOne)
-        connectionOne.unsubscribe()
+        connectionOne.cancel()
 
         val subscriberTwo = mock<ReduxSubscribableStore.Subscriber<TestState>>()
         store.subscribe(subscriberTwo)

@@ -48,6 +48,13 @@ interface ReduxBufferedStore<S : ReduxState, A : ReduxAction> : ReduxStore<S, A>
     fun resetBuffer(initialState: S)
 
     /**
+     * Returns an immutable list - a copy of state buffer.
+     *
+     * @return an immutable list of states
+     */
+    fun buffer(): List<ReduxState>
+
+    /**
      * Moves the current state buffer index to the new position.
      *
      * @param position position in a state buffer to which the store should jump

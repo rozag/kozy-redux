@@ -332,4 +332,22 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
         assertEquals(1, bufferedStore.currentBufferSize())
     }
 
+    @Test
+    fun bufferInvokedWithLimitedBuffer_correctStateListReturned() {
+        bufferedStore.changeSizeLimit(2)
+        bufferedStore.dispatch(initialAction)
+        bufferedStore.dispatch(initialAction)
+        val expectedList = listOf(newState, newState)
+        assertEquals(expectedList, bufferedStore.buffer())
+    }
+
+    @Test
+    fun bufferInvokedWithUnlimitedBuffer_correctStateListReturned() {
+        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+        bufferedStore.dispatch(initialAction)
+        bufferedStore.dispatch(initialAction)
+        val expectedList = listOf(initialState, newState, newState)
+        assertEquals(expectedList, bufferedStore.buffer())
+    }
+
 }

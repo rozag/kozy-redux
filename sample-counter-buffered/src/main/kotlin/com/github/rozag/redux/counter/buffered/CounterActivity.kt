@@ -21,7 +21,7 @@ class CounterActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<C
     private lateinit var stateNumberSeekBar: SeekBar
     private lateinit var resetToThisStateButton: Button
 
-    private lateinit var connection: ReduxSubscribableStore.Connection
+    private lateinit var subscription: ReduxSubscribableStore.Subscription
 
     private var isExiting = false
 
@@ -63,12 +63,12 @@ class CounterActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<C
 
     override fun onStart() {
         super.onStart()
-        connection = store.subscribe(this)
+        subscription = store.subscribe(this)
     }
 
     override fun onStop() {
         super.onStop()
-        connection.unsubscribe()
+        subscription.cancel()
     }
 
     override fun onBackPressed() {

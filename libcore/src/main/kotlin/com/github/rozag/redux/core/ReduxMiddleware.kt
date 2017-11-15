@@ -22,6 +22,10 @@ package com.github.rozag.redux.core
  * // And apply it to your store
  * store.applyMiddleware(LoggingMiddleware())
  * ```
+ *
+ * @param S the type of your [ReduxState]
+ * @param A the type of your root [ReduxAction]
+ * @param R the type of your [ReduxStore]
  */
 abstract class ReduxMiddleware<S : ReduxState, A : ReduxAction, in R : ReduxStore<S, A>> {
 

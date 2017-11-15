@@ -4,6 +4,9 @@ package com.github.rozag.redux.core
  * [ReduxStore] is a core interface in a Redux paradigm. It holds your [ReduxState]
  * and applies the reducer tree to [ReduxAction] which you dispatch. It also allows
  * you to wrap the [ReduxStore.dispatch] method with your custom [ReduxMiddleware].
+ *
+ * @param S the type of your [ReduxState]
+ * @param A the type of your root [ReduxAction]
  */
 interface ReduxStore<S : ReduxState, A : ReduxAction> {
 

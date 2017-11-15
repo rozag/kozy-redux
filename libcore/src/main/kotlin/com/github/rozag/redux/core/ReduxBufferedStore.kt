@@ -6,6 +6,9 @@ package com.github.rozag.redux.core
  * extension for [ReduxStore]. Collection which contains all [ReduxState] is called state buffer.
  *
  * Moreover, you can limit the size of the state buffer (e.g. store only 20 latest [ReduxState]).
+ *
+ * @param S the type of your [ReduxState]
+ * @param A the type of your root [ReduxAction]
  */
 interface ReduxBufferedStore<S : ReduxState, A : ReduxAction> : ReduxStore<S, A> {
 

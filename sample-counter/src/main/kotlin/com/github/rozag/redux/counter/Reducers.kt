@@ -1,7 +1,7 @@
 package com.github.rozag.redux.counter
 
 fun rootReducer(state: CounterState, action: CounterAction): CounterState = when (action) {
-    is CounterAction.SetUp -> CounterState.Initial
+    is CounterAction.SetUp -> CounterState.INITIAL
     is CounterAction.Add -> when (action) {
         is CounterAction.Add.One -> addOneReducer(state, action)
         is CounterAction.Add.Ten -> addTenReducer(state, action)
@@ -10,7 +10,7 @@ fun rootReducer(state: CounterState, action: CounterAction): CounterState = when
         is CounterAction.Subtract.One -> subtractOneReducer(state, action)
         is CounterAction.Subtract.Ten -> subtractTenReducer(state, action)
     }
-    is CounterAction.TearDown -> CounterState.Initial
+    is CounterAction.TearDown -> CounterState.INITIAL
 }
 
 fun addOneReducer(state: CounterState, action: CounterAction.Add.One): CounterState = CounterState(state.count + 1)

@@ -10,7 +10,7 @@ typealias CounterStore = ReduxSubscribableStore<CounterState, CounterAction>
 class App : Application() {
 
     companion object {
-        val store: CounterStore = SubscribableStore(CounterState.Initial, ::rootReducer)
+        val store: CounterStore = SubscribableStore(CounterState.INITIAL, ::rootReducer)
     }
 
     override fun onCreate() {

@@ -1,4 +1,5 @@
 apply plugin: "kotlin"
+apply plugin: "com.novoda.bintray-release"
 
 dependencies {
     // Core library
@@ -15,3 +16,12 @@ dependencies {
 
 sourceCompatibility = sourceCompatJavaVersion
 targetCompatibility = targetCompatJavaVersion
+
+publish {
+    groupId = publishGroupId
+    artifactId = "base"
+    publishVersion = publishVersion
+    desc = publishDescription
+    licences = ["MIT"]
+    website = publishRepoUrl
+}

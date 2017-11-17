@@ -11,8 +11,8 @@ android {
         minSdkVersion minSdk
         targetSdkVersion targetSdk
 
-        versionCode majorAppVersion * 10000 + minorAppVersion * 1000 + patchAppVersion * 100 + buildAppVersion
-        versionName "${majorAppVersion}.${minorAppVersion}.${patchAppVersion}"
+        versionCode majorAppVersion * 100 + minorAppVersion
+        versionName "${majorAppVersion}.${minorAppVersion}"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

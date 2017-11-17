@@ -19,7 +19,7 @@ targetCompatibility = targetCompatJavaVersion
 
 publish {
     groupId = publishGroupId
-    artifactId = "base"
+    artifactId = "kozy-redux-base"
     publishVersion = publishVersion
     desc = publishDescription
     licences = ["MIT"]

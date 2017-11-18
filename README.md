@@ -30,6 +30,9 @@ Pure Kotlin redux library. This library is being developed with several key idea
 ## Table of contents
 
 * [Quick start](https://github.com/rozag/kozy-redux#quick-start)
+* [Middleware](https://github.com/rozag/kozy-redux#middleware)
+* [Action creators - handling async stuff](https://github.com/rozag/kozy-redux#action-creators-handling-async-stuff)
+* [Buffered store](https://github.com/rozag/kozy-redux#buffered-store)
 * [What's inside](https://github.com/rozag/kozy-redux#whats-inside)
 * [Samples](https://github.com/rozag/kozy-redux#samples)
 * [TODO](https://github.com/rozag/kozy-redux#todo)
@@ -135,6 +138,18 @@ class MyActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<MyStat
     }
 }
 ```
+
+
+## Middleware
+TBD
+
+
+## Action creators - handling async stuff
+TBD
+
+
+## Buffered store
+TBD
 
 
 ## What's inside

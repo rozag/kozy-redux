@@ -5,12 +5,12 @@
 <p align="center">
   <a href="https://bintray.com/rozag/maven/kozy-redux-core/_latestVersion">
         <img 
-             src="https://img.shields.io/badge/kozy--redux--core-0.42-brightgreen.svg" 
+             src="https://img.shields.io/badge/kozy--redux--core-0.43-brightgreen.svg" 
              alt="kozy-redux-core">
   </a>
   <a href="https://bintray.com/rozag/maven/kozy-redux-base/_latestVersion">
         <img 
-             src="https://img.shields.io/badge/kozy--redux--base-0.42-brightgreen.svg" 
+             src="https://img.shields.io/badge/kozy--redux--base-0.43-brightgreen.svg" 
              alt="kozy-redux-base">
   </a>
   <a href="https://twitter.com/intent/tweet?text=Pure%20Kotlin%20Redux%20library%20for%20Android&url=https://github.com/rozag/kozy-redux&via=alexey_mileev&hashtags=Kotlin,Redux,AndroidDev">
@@ -20,7 +20,7 @@
   </a>
 </p>
 
-Pure Kotlin redux library. This library is being developed with several key ideas:
+Pure Kotlin redux library for Android. This library is being developed with several key ideas:
 * It should be tiny
 * The code should be as simple as possible
 * If I need to hack, don't bother me
@@ -58,7 +58,7 @@ allprojects {
 Add the dependency to your application module's `build.gradle`.
 ```groovy
 dependencies {
-    implementation "com.github.rozag:kozy-redux-base:0.42"
+    implementation "com.github.rozag:kozy-redux-base:0.43"
 }
 ```
 

@@ -23,8 +23,7 @@
 Pure Kotlin redux library for Android. This library is being developed with several key ideas:
 * It should be tiny
 * The code should be as simple as possible
-* If I need to hack, don't bother me
-* It should help me to develop Redux-arhictectured Android apps
+* It should be relatively easy to adapt the library to your use case. Don’t hesitate to file an issue if you hit any blocker
 
 
 ## Table of contents

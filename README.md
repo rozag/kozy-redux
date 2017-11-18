@@ -142,7 +142,22 @@ class MyActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<MyStat
 
 
 ## Middleware
-TBD
+If you want to perform some action on every action dispatch (logging, analytics, etc.) you can use middleware. In `kozy-redux` it implemented as an abstract `ReduxMiddleware` class. Under the hood it simply wraps the `store.dispatch(...)` method. To add a new middleware to your app you should extend the `ReduxMiddleware` class, implement `doBeforeDispatch(store, action)` and `doAfterDispatch(store, action)` methods and apply your middleware to your store via the `store.applyMiddleware(vararg middlewareList)` method. For example, you can implement a middleware which will log every action and every new store state like this:
+```kotlin
+class LoggingMiddleware : ReduxMiddleware<ReduxState, ReduxAction, ReduxStore<ReduxState, ReduxAction>>() {
+    override fun doBeforeDispatch(store: ReduxStore<ReduxState, ReduxAction>, action: ReduxAction) {
+        Log.d("LoggingMiddleware", "Dispatching action: $action")
+    }
+ 
+    override fun doAfterDispatch(store: ReduxStore<ReduxState, ReduxAction>, action: ReduxAction) {
+        Log.d("LoggingMiddleware", "New state: ${store.getState()}")
+    }
+}
+// And apply it to your store
+store.applyMiddleware(LoggingMiddleware())
+```
+
+*Small tip: if you want to build the analytics middleware, it would be great to create your action hierarchy in a such way that you don't need any `analytics.sendEvent(...)` statements anywhere except your analytics middleware.*
 
 
 ## Action creators - handling async stuff

@@ -142,6 +142,7 @@ class MyActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<MyStat
 
 
 ## Middleware
+
 If you want to perform some action on every action dispatch (logging, analytics, etc.) you can use middleware. In `kozy-redux` it implemented as an abstract `ReduxMiddleware` class. Under the hood it simply wraps the `store.dispatch(...)` method. To add a new middleware to your app you should extend the `ReduxMiddleware` class, implement `doBeforeDispatch(store, action)` and `doAfterDispatch(store, action)` methods and apply your middleware to your store via the `store.applyMiddleware(vararg middlewareList)` method. For example, you can implement a middleware which will log every action and every new store state like this:
 ```kotlin
 class LoggingMiddleware : ReduxMiddleware<ReduxState, ReduxAction, ReduxStore<ReduxState, ReduxAction>>() {
@@ -161,6 +162,7 @@ store.applyMiddleware(LoggingMiddleware())
 
 
 ## Action creators - handling async stuff
+
 One interesting question is "Where should I put the asynchronous code?". The whole idea of the reducers is that they should be pure functions - functions without any side effects or dependencies. The answer is action creators. Action creator is a function or a class that can create and dispatch actions to the store. `kozy-redux` doesn't provide any classes or interfaces for such entities - you're free to create them the way you like.
 
 So, we want to perform a database operation, for instance. Also we want to show a progress bar while the operation is running. The common way to handle such case is to create an action for this:
@@ -176,7 +178,25 @@ Now we want to perform an operation. First of all, you invoke your action creato
 
 
 ## Buffered store
-TBD
+
+In some apps we need an undo-like functionality. Buffered store is a way to handle this kind of tasks. In `kozy-redux` buffered store looks like a `ReduxBufferedStore` [interface](https://github.com/rozag/kozy-redux/blob/master/libcore/src/main/kotlin/com/github/rozag/redux/core/ReduxBufferedStore.kt) and an implementation for it - a `BufferedSubscribableStore` [class](https://github.com/rozag/kozy-redux/blob/master/libbase/src/main/kotlin/com/github/rozag/redux/base/BufferedSubscribableStore.kt). The interface looks as following:
+```kotlin
+interface ReduxBufferedStore<S : ReduxState, A : ReduxAction> : ReduxStore<S, A> {
+    fun bufferSizeLimit(): Int
+    fun changeSizeLimit(newSizeLimit: Int)
+    fun currentBufferSize(): Int
+    fun currentBufferPosition(): Int
+    fun resetBuffer(initialState: S)
+    fun buffer(): List<ReduxState>
+    fun jumpToState(position: Int)
+    fun resetToState(position: Int)
+}
+```
+
+Some of these methods are useful for testing, debugging or building a log when an error occurs. Let's take a look at the primary ones:
+* `resetBuffer(initialState: S)` clears the buffer, puts the `initialState` into it and notifies the subscribers. You can use this method with the `TearDown` action pattern, for example
+* `jumpToState(position: Int)` changes the state buffer pointer position to the specified index and notifies the subscribers
+* `resetToState(position: Int)` - same as `jumpToState` but the part of the buffer with `index > position` is removed
 
 
 ## What's inside

@@ -36,6 +36,7 @@ Pure Kotlin redux library. This library is being developed with several key idea
 * [What's inside](https://github.com/rozag/kozy-redux#whats-inside)
 * [Samples](https://github.com/rozag/kozy-redux#samples)
 * [TODO](https://github.com/rozag/kozy-redux#todo)
+* [Additional reading](https://github.com/rozag/kozy-redux#additional-reading)
 * [Contributing](https://github.com/rozag/kozy-redux#contributing)
 * [License](https://github.com/rozag/kozy-redux#license)
 * [Acknowledgements](https://github.com/rozag/kozy-redux#acknowledgements)
@@ -174,6 +175,13 @@ Sample | Description
 * Add more complex sample project
 * Add wiki with best practices and tips
 * kozy-redux-rx - store and buffered store with [RxJava](https://github.com/ReactiveX/RxJava) subscriptions
+
+
+## Additional reading
+* [Redux docs](https://redux.js.org)
+* [A cartoon guide to Flux *by Lin Clark*](https://code-cartoons.com/a-cartoon-guide-to-flux-6157355ab207)
+* [A cartoon intro to Redux *by Lin Clark*](https://code-cartoons.com/a-cartoon-intro-to-redux-3afb775501a6)
+* [Thunks in Redux: The Basics *by Gabriel Lebec*](https://medium.com/fullstack-academy/thunks-in-redux-the-basics-85e538a3fe60)
 
 
 ## Contributing

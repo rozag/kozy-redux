@@ -106,3 +106,13 @@ hs_err_pid*
 
 # kannotator plugin
 annotations
+
+# Visual Studio Code generated files
+.project
+.settings/
+*/.classpath
+*/.project
+*/.settings/
+*/.classpath
+*/.project
+*/.settings/

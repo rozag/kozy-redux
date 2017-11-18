@@ -52,6 +52,7 @@ allprojects {
     repositories {
         jcenter()
         google()
+        maven { url = "https://dl.bintray.com/rozag/maven" } // TODO: remove when linked to jCenter
     }
 }
 

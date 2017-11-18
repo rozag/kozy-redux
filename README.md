@@ -161,7 +161,18 @@ store.applyMiddleware(LoggingMiddleware())
 
 
 ## Action creators - handling async stuff
-TBD
+One interesting question is "Where should I put the asynchronous code?". The whole idea of the reducers is that they should be pure functions - functions without any side effects or dependencies. The answer is action creators. Action creator is a function or a class that can create and dispatch actions to the store. `kozy-redux` doesn't provide any classes or interfaces for such entities - you're free to create them the way you like.
+
+So, we want to perform a database operation, for instance. Also we want to show a progress bar while the operation is running. The common way to handle such case is to create an action for this:
+```kotlin
+sealed class WriteSmthToDb : MyAction() {
+    class Started : WriteSmthToDb()
+    data class Success(val result: Result) : WriteSmthToDb()
+    data class Error(val error: Error) : WriteSmthToDb
+}
+```
+
+Now we want to perform an operation. First of all, you invoke your action creator (let it be `WriteSmthToDbActionCreator`). The action creator dispatches the `WriteSmthToDb.Started` action to the store and starts the async operation. Your reducer returns a new state. Your subscriber view receives the state with the flag that the progress bar should be visible and updates UI. When the operation finishes your action creator dispatches either `WriteSmthToDb.Success` or `WriteSmthToDb.Error` action to the store and your UI updates according to the new state.
 
 
 ## Buffered store

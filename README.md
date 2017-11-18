@@ -39,7 +39,102 @@ Pure Kotlin redux library. This library is being developed with several key idea
 
 
 ## Quick start
-TBD
+
+Add the repository to your root `build.gradle` (this step will be removed after linking to jCenter).
+```groovy
+allprojects {
+    repositories {
+        jcenter()
+        google()
+        maven { url = "https://dl.bintray.com/rozag/maven" }
+    }
+}
+```
+
+Add the dependency to your application module's `build.gradle`.
+```groovy
+dependencies {
+    implementation "com.github.rozag:kozy-redux-base:0.42"
+}
+```
+
+Define your state class. This one will keep the whole state of your app. Normally you don't mutate your state, so make it immutable. Defining an `INITIAL` state is a good practice - your app starts with this empty state.
+```kotlin
+data class MyState(val number: Int) : ReduxState {
+    companion object {
+        val INITIAL: MyState = MyState(number = 0)
+    }
+}
+```
+
+Define your action sealed class. Kotlin sealed classes make it pleasure to route different actions to different reducers.
+```kotlin
+sealed class MyAction : ReduxAction {
+    class SetUp : MyAction()
+    class TearDown : MyAction()
+    sealed class Feed : MyAction() {
+        // Feed actions classes go here
+    }
+    sealed class Profile : MyAction() {
+        // Profile actions classes go here
+    }
+}
+```
+
+Define your root reducer function. Reducer is a pure function that takes the previous state and an action and returns a new state. Your root reducer is like a router that routes different actions and different state parts to different reducers. Kotlin's `when` expression is your friend here. Note that your child reducers can accept a tiny piece of the state tree - they don't usually need the whole app state. The `SetUp` action in the snippet below is used to inflate your initial state. In this simple tutorial we don't need it, but you can use this pattern in your apps. Same with the `TearDown` action - we don't want links to our objects after the app is closed. You can use such action to fill the unneeded state fields with some empty stuff.
+```kotlin
+fun rootReducer(state: MyState, action: MyAction): MyState = when (action) {
+    is MyAction.SetUp -> MyState.INITIAL
+    is MyAction.TearDown -> MyState.INITIAL
+    is MyAction.Feed -> MyState(feedReducer(state.number, action))
+    is MyAction.Profile -> MyState(profileReducer(state.number, action))
+}
+fun feedReducer(number: Int, action: MyAction.Feed): Int { ... }
+fun profileReducer(number: Int, action: MyAction.Profile): Int { ... }
+```
+
+Create your store object. You can place it wherever you want - inside your `Application` class, for instance. You can also provide your store to other components via any DI framework. But remember: **there should be only one instance of the store in your app**.
+```kotlin
+typealias MyStore = ReduxSubscribableStore<MyState, MyAction>
+class MyApplication : Application() {
+    companion object {
+        val Store: MyStore = SubscribableStore(MyState.INITIAL, ::rootReducer)
+        /* 
+         * You can also use the 
+         *                      BufferedSubscribableStore(
+         *                              MyState.INITIAL, 
+         *                              ::rootReducer, 
+         *                              MY_BUFFER_SIZE_LIMIT,
+         *                              MY_INITIAL_BUFFER_SIZE
+         *                      ) 
+         * constructor to create a state buffer backed store for the time travel stuff
+         */
+    }
+    override fun onCreate() {
+        super.onCreate()
+        store.dispatch(CounterAction.SetUp())
+    }
+}
+```
+
+And now you're ready to go. Dispatch your actions to the store via the `store.dispatch(...)` - your reducer will handle the action and return the new state. Subscribe on state updates in your classes via the `store.subscribe(...)`. The returned `Subscription` object allows you to unsubscribe from state updates. In `Activity` you can do it like this:
+```kotlin
+class MyActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<MyState> {
+    private val store: MyStore = MyApplication.Store
+    private lateinit var subscription: ReduxSubscribableStore.Subscription
+    override fun onStart() {
+        super.onStart()
+        subscription = store.subscribe(this)
+    }
+    override fun onStop() {
+        super.onStop()
+        subscription.cancel()
+    }
+    override fun onNewState(state: MyState) {
+        // Handle the new state
+    }
+}
+```
 
 
 ## What's inside
@@ -47,7 +142,7 @@ TBD
 Dependency | Description
 ---------- | -----------
 [kozy-redux-core](https://github.com/rozag/kozy-redux/tree/master/libcore) | Core interfaces. Usually you don't use this dependency, however it's useful for future library development.
-[kozy-redux-base](https://github.com/rozag/kozy-redux/tree/master/libbase) | This one is built on top of the kozy-redux-core and provides a subscribable store interface and 2 store implementations: a subscribable store and a buffered subscribable store.
+[kozy-redux-base](https://github.com/rozag/kozy-redux/tree/master/libbase) | This one is built on top of the `kozy-redux-core` and provides a subscribable store interface and 2 store implementations: a subscribable store and a buffered subscribable store.
 
 
 ## Samples
@@ -55,7 +150,7 @@ Dependency | Description
 Sample | Description
 ------ | -----------
 [sample-counter](https://github.com/rozag/kozy-redux/tree/master/sample-counter) | Simple counter app: press operation button - see the result on the screen. Kind of hello world in a Redux world.
-[sample-counter-buffered](https://github.com/rozag/kozy-redux/tree/master/sample-counter-buffered) | Same as the sample-counter, but now the buffered store is used - time travel within your state buffer with a slider.
+[sample-counter-buffered](https://github.com/rozag/kozy-redux/tree/master/sample-counter-buffered) | Same as the `sample-counter`, but now the buffered store is used - time travel within your state buffer with a slider.
 
 
 ## TODO

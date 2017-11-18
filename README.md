@@ -43,17 +43,6 @@ Pure Kotlin redux library for Android. This library is being developed with seve
 
 ## Quick start
 
-Add the repository to your root `build.gradle` (this step will be removed after linking to jCenter).
-```groovy
-allprojects {
-    repositories {
-        jcenter()
-        google()
-        maven { url = "https://dl.bintray.com/rozag/maven" }
-    }
-}
-```
-
 Add the dependency to your application module's `build.gradle`.
 ```groovy
 dependencies {
@@ -216,9 +205,8 @@ Sample | Description
 
 ## TODO
 
-* Remove maven url instructions from the [Quick start](https://github.com/rozag/kozy-redux#quick-start) when linked to jCenter
 * Add more complex sample project
-* Add wiki with best practices and tips
+* Add best practices and tips to the wiki
 * kozy-redux-rx - store and buffered store with [RxJava](https://github.com/ReactiveX/RxJava) subscriptions
 
 

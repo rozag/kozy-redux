@@ -3,7 +3,6 @@ package com.github.rozag.redux.base
 import com.github.rozag.redux.core.ReduxAction
 import com.github.rozag.redux.core.ReduxBufferedStore
 import com.github.rozag.redux.core.ReduxState
-import java.util.*
 
 /**
  * An implementation of [ReduxBufferedSubscribableStore] interface. It can do all the
@@ -79,13 +78,19 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
 
     override fun currentBufferPosition(): Int = currentBufferPosition
 
+    /**
+     * Resets the state buffer, populates it with the new initial [ReduxState] and notifies subscribers.
+     *
+     * @param initialState new initial [ReduxState] for the state buffer
+     */
     override fun resetBuffer(initialState: S) {
         stateBuffer.clear()
         stateBuffer.add(initialState)
         currentBufferPosition = 0
+        notifySubscribers()
     }
 
-    override fun buffer(): List<ReduxState> = stateBuffer.toList()
+    override fun buffer(): List<ReduxState> = ArrayList(stateBuffer)
 
     private fun rangeCheck(position: Int) {
         val bufferSize = stateBuffer.size
@@ -94,12 +99,23 @@ open class BufferedSubscribableStore<S : ReduxState, A : ReduxAction>(
         }
     }
 
+    /**
+     * Moves the current state buffer index to the new position and notifies subscribers.
+     *
+     * @param position position in a state buffer to which the store should jump
+     */
     override fun jumpToState(position: Int) {
         rangeCheck(position)
         currentBufferPosition = position
         notifySubscribers()
     }
 
+    /**
+     * Moves the current state buffer index to the new position and removes all
+     * following [ReduxState] from the state buffer and notifies subscribers.
+     *
+     * @param position position in a state buffer to which the store should be reset
+     */
     override fun resetToState(position: Int) {
         rangeCheck(position)
         for (i in stateBuffer.lastIndex downTo position + 1) {

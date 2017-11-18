@@ -231,7 +231,7 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
     }
 
     @Test
-    fun clearBufferInvoked_bufferSizeEqualsOne() {
+    fun resetBufferInvoked_bufferSizeEqualsOne() {
         bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
         bufferedStore.dispatch(initialAction)
         assertEquals(2, bufferedStore.currentBufferSize())
@@ -241,13 +241,26 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
     }
 
     @Test
-    fun clearBufferInvoked_getStateReturnsInitialState() {
+    fun resetBufferInvoked_getStateReturnsInitialState() {
         bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
         bufferedStore.dispatch(initialAction)
         assertEquals(2, bufferedStore.currentBufferSize())
 
         bufferedStore.resetBuffer(initialState)
         assertEquals(initialState, bufferedStore.getState())
+    }
+
+    @Test
+    fun resetBufferInvoked_subscriberNotified() {
+        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+        bufferedStore.dispatch(initialAction)
+
+        val subscriber = mock<ReduxSubscribableStore.Subscriber<TestState>>()
+        bufferedStore.subscribe(subscriber)
+        verify(subscriber, times(1)).onNewState(newState)
+
+        bufferedStore.resetBuffer(initialState)
+        verify(subscriber, times(1)).onNewState(initialState)
     }
 
     @Test(expected = IllegalArgumentException::class)

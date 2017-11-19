@@ -1,1 +1,1 @@
-include ':sample-counter', ':libbase', ':libcore', ':sample-counter-buffered'
+include ':sample-counter', ':libbase', ':libcore', ':sample-counter-buffered', ':sample-notes'

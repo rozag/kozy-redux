@@ -1,0 +1,18 @@
+<resources>
+
+    <color name="primary">#607d8b</color>
+    <color name="primary_light">#8eacbb</color>
+    <color name="primary_dark">#34515e</color>
+
+    <color name="accent">#dcbb94</color>
+    <color name="accent_light">#ffedc5</color>
+    <color name="accent_dark">#a98b66</color>
+
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+
+    <color name="icons">#ffffff</color>
+    <color name="divider">#bdbdbd</color>
+    <color name="window_bg">#eeeeee</color>
+
+</resources>

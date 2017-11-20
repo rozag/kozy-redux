@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/rozag/kozy-redux/blob/master/logo/logo-kozy-redux.png" width="384">
+  <img src="https://github.com/rozag/kozy-redux/blob/master/static/logo-kozy-redux.png" width="384">
 </p>
 
 <p align="center">

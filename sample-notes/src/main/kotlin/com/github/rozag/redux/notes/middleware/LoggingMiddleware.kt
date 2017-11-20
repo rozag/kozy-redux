@@ -12,11 +12,11 @@ class LoggingMiddleware(
 ) : ReduxMiddleware<State, Action, ReduxStore<State, Action>>() {
 
     override fun doAfterDispatch(store: ReduxStore<State, Action>, action: Action) {
-        logger.d(tag, "Dispatching action: $action")
+        logger.d("Dispatching action: $action")
     }
 
     override fun doBeforeDispatch(store: ReduxStore<State, Action>, action: Action) {
-        logger.d(tag, "New state: ${store.getState()}")
+        logger.d("New state: ${store.getState()}")
     }
 
 }

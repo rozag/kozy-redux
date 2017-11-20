@@ -15,6 +15,12 @@ android {
         versionName "${majorAppVersion}.${minorAppVersion}"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -82,4 +88,11 @@ dependencies {
 
     // Android support library
     implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
+
+    // Timber logging library
+    implementation "com.jakewharton.timber:timber:${timberVersion}"
+
+    // Room
+    implementation "android.arch.persistence.room:runtime:${roomVersion}"
+    annotationProcessor "android.arch.persistence.room:compiler:${roomVersion}"
 }

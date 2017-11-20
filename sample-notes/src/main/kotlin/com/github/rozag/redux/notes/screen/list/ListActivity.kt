@@ -1,9 +1,7 @@
 package com.github.rozag.redux.notes.screen.list
 
 import android.os.Bundle
-import com.github.rozag.redux.notes.R
-import com.github.rozag.redux.notes.ReduxActivity
-import com.github.rozag.redux.notes.State
+import com.github.rozag.redux.notes.*
 
 class ListActivity : ReduxActivity() {
 
@@ -12,7 +10,7 @@ class ListActivity : ReduxActivity() {
     override val displayHomeAsUp = false
     override val homeButtonEnabled = false
 
-    private val loadNotesActionCreator = LoadNotesActionCreator(store)
+    private val loadNotesActionCreator: ActionCreator = NotesApplication.loadNotesActionCreator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

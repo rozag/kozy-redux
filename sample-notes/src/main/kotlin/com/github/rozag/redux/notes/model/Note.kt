@@ -1,4 +1,3 @@
 package com.github.rozag.redux.notes.model
 
-sealed class Note {
-}
+data class Note(val id: String, val title: String, val body: String)

@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.github.rozag.redux.notes.BaseActivity
 import com.github.rozag.redux.notes.R
 
-class NotesListActivity : BaseActivity() {
+class ListActivity : BaseActivity() {
 
     override val layoutResourceId = R.layout.activity_main
     override val toolbarTitleId = R.string.app_name

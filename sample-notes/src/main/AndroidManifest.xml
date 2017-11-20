@@ -22,7 +22,7 @@
 
         </activity>
 
-        <activity android:name=".screen.list.NotesListActivity"/>
+        <activity android:name=".screen.list.ListActivity"/>
 
     </application>
 

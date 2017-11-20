@@ -3,7 +3,7 @@ package com.github.rozag.redux.notes.screen.splash
 import android.content.Intent
 import android.os.Bundle
 import com.github.rozag.redux.notes.BaseActivity
-import com.github.rozag.redux.notes.screen.list.NotesListActivity
+import com.github.rozag.redux.notes.screen.list.ListActivity
 
 class SplashActivity : BaseActivity() {
 
@@ -14,7 +14,7 @@ class SplashActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startActivity(Intent(this, NotesListActivity::class.java))
+        startActivity(Intent(this, ListActivity::class.java))
         finish()
     }
 

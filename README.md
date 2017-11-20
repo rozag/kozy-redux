@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/rozag/kozy-redux/blob/master/logo/logo-kozy-redux.png" width="384">
+  <img src="https://github.com/rozag/kozy-redux/blob/master/static/logo-kozy-redux.png" width="384">
 </p>
 
 <p align="center">
@@ -50,7 +50,7 @@ dependencies {
 }
 ```
 
-Define your state class. This one will keep the whole state of your app. Normally you don't mutate your state, so make it immutable. Defining an `INITIAL` state is a good practice - your app starts with this empty state.
+Define a state class. It will keep the entire state of your app. Normally you don't mutate your state, so make it immutable. It is a good practice to define an `INITIAL` state.
 ```kotlin
 data class MyState(val number: Int) : ReduxState {
     companion object {
@@ -59,7 +59,7 @@ data class MyState(val number: Int) : ReduxState {
 }
 ```
 
-Define your action sealed class. Kotlin sealed classes make it pleasure to route different actions to different reducers.
+Define an action sealed class. Sealed classes make routing actions to reducers a breeze because the `else` branch in the `when` expression can be dropped (with sealed classes the Kotlin compiler can prove that all cases have been handled) - see the root reducer sample below for details.
 ```kotlin
 sealed class MyAction : ReduxAction {
     class SetUp : MyAction()
@@ -73,7 +73,7 @@ sealed class MyAction : ReduxAction {
 }
 ```
 
-Define your root reducer function. Reducer is a pure function that takes the previous state and an action and returns a new state. Your root reducer is like a router that routes different actions and different state parts to different reducers. Kotlin's `when` expression is your friend here. Note that your child reducers can accept a tiny piece of the state tree - they don't usually need the whole app state. The `SetUp` action in the snippet below is used to inflate your initial state. In this simple tutorial we don't need it, but you can use this pattern in your apps. Same with the `TearDown` action - we don't want links to our objects after the app is closed. You can use such action to fill the unneeded state fields with some empty stuff.
+Define a root reducer function. Reducer is a pure function that takes the previous state and an action and returns a new state. Your root reducer is like a router that routes different actions and different state parts to different reducers. Kotlin's `when` expression is your friend here. Note that your child reducers can accept a tiny piece of the state tree - they don't usually need the whole app state. The `SetUp` action in the snippet below is used to inflate your initial state. In this simple tutorial we don't need it, but you can use this pattern in your apps. Same with the `TearDown` action - we don't want links to our objects after the app is closed. You can use those actions to populate unneeded state fields with default values.
 ```kotlin
 fun rootReducer(state: MyState, action: MyAction): MyState = when (action) {
     is MyAction.SetUp -> MyState.INITIAL
@@ -85,7 +85,7 @@ fun feedReducer(number: Int, action: MyAction.Feed): Int { ... }
 fun profileReducer(number: Int, action: MyAction.Profile): Int { ... }
 ```
 
-Create your store object. You can place it wherever you want - inside your `Application` class, for instance. You can also provide your store to other components via any DI framework. But remember: **there should be only one instance of the store in your app**.
+Create a store object. You can place it wherever you want - inside your `Application` class, for instance. You can also provide your store to other components via any DI framework. But remember: **there should be only one instance of the store in your app**.
 ```kotlin
 typealias MyStore = ReduxSubscribableStore<MyState, MyAction>
 class MyApplication : Application() {
@@ -109,7 +109,7 @@ class MyApplication : Application() {
 }
 ```
 
-And now you're ready to go. Dispatch your actions to the store via the `store.dispatch(...)` - your reducer will handle the action and return the new state. Subscribe on state updates in your classes via the `store.subscribe(...)`. The returned `Subscription` object allows you to unsubscribe from state updates. In `Activity` you can do it like this:
+And now you're ready to go. Dispatch your actions to the store via `store.dispatch(...)` - your reducer will handle the action and return a new state. Subscribe to state updates in your classes via `store.subscribe(...)`. The returned `Subscription` object allows you to unsubscribe from state updates. In `Activity` you can do it like this:
 ```kotlin
 class MyActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<MyState> {
     private val store: MyStore = MyApplication.Store
@@ -131,7 +131,7 @@ class MyActivity : AppCompatActivity(), ReduxSubscribableStore.Subscriber<MyStat
 
 ## Middleware
 
-If you want to perform some action on every action dispatch (logging, analytics, etc.) you can use middleware. In `kozy-redux` it implemented as an abstract `ReduxMiddleware` class. Under the hood it simply wraps the `store.dispatch(...)` method. To add a new middleware to your app you should extend the `ReduxMiddleware` class, implement `doBeforeDispatch(store, action)` and `doAfterDispatch(store, action)` methods and apply your middleware to your store via the `store.applyMiddleware(vararg middlewareList)` method. For example, you can implement a middleware which will log every action and every new store state like this:
+If you want to react to an action dispatch (logging, analytics, etc.) you can use middleware. In `kozy-redux` it is implemented as an abstract `ReduxMiddleware` class. Under the hood it simply wraps the `store.dispatch(...)` method. To add a new middleware to your app you should extend the `ReduxMiddleware` class, implement `doBeforeDispatch(store, action)` and `doAfterDispatch(store, action)` methods and apply your middleware to your store via the `store.applyMiddleware(vararg middlewareList)` method. For example, you can implement a middleware which will log every action and every new store state like this:
 ```kotlin
 class LoggingMiddleware : ReduxMiddleware<ReduxState, ReduxAction, ReduxStore<ReduxState, ReduxAction>>() {
     override fun doBeforeDispatch(store: ReduxStore<ReduxState, ReduxAction>, action: ReduxAction) {
@@ -146,14 +146,14 @@ class LoggingMiddleware : ReduxMiddleware<ReduxState, ReduxAction, ReduxStore<Re
 store.applyMiddleware(LoggingMiddleware())
 ```
 
-*Small tip: if you want to build the analytics middleware, it would be great to create your action hierarchy in a such way that you don't need any `analytics.sendEvent(...)` statements anywhere except your analytics middleware.*
+*Small tip: if you want to build the analytics middleware, it would be great to create your action hierarchy in such a way that you don't need any `analytics.sendEvent(...)` statements anywhere except your analytics middleware.*
 
 
 ## Action creators - handling async stuff
 
-One interesting question is "Where should I put the asynchronous code?". The whole idea of the reducers is that they should be pure functions - functions without any side effects or dependencies. The answer is action creators. Action creator is a function or a class that can create and dispatch actions to the store. `kozy-redux` doesn't provide any classes or interfaces for such entities - you're free to create them the way you like.
+One interesting question is "Where should I put the asynchronous code?". The whole idea of reducers is that they should be pure functions - functions without any side effects or dependencies. The answer is action creators. Action creator is a function or a class that can create and dispatch actions to the store. `kozy-redux` doesn't provide any classes or interfaces for such entities - you're free to create them the way you like.
 
-So, we want to perform a database operation, for instance. Also we want to show a progress bar while the operation is running. The common way to handle such case is to create an action for this:
+Let's say we want to perform a database operation and show a progress bar while the operation is running. The common way to handle such case is to create an action for this:
 ```kotlin
 sealed class WriteSmthToDb : MyAction() {
     class Started : WriteSmthToDb()
@@ -163,6 +163,21 @@ sealed class WriteSmthToDb : MyAction() {
 ```
 
 Now we want to perform an operation. First of all, you invoke your action creator (let it be `WriteSmthToDbActionCreator`). The action creator dispatches the `WriteSmthToDb.Started` action to the store and starts the async operation. Your reducer returns a new state. Your subscriber view receives the state with the flag that the progress bar should be visible and updates UI. When the operation finishes your action creator dispatches either `WriteSmthToDb.Success` or `WriteSmthToDb.Error` action to the store and your UI updates according to the new state.
+```kotlin
+class WriteSmthToDbActionCreator(val store: MyStore, val db: MyDatabase) {
+    fun createAndDispatch(someData: String) {
+        // The progress bar should be shown after dispatching this action
+        store.dispatch(MyAction.WriteSmthToDb.Started())
+
+        // This method is async, one of callbacks will be invoked later
+        db.writeSmth(
+                someData,
+                { result -> store.dispatch(MyAction.WriteSmthToDb.Success(result)) },
+                { error -> store.dispatch(MyAction.WriteSmthToDb.Error(error)) }
+        )
+    }
+}
+```
 
 
 ## Buffered store

@@ -5,6 +5,9 @@ import android.arch.persistence.room.Room
 import com.github.rozag.redux.base.BufferedSubscribableStore
 import com.github.rozag.redux.notes.database.DB_NAME
 import com.github.rozag.redux.notes.database.NotesDatabase
+import com.github.rozag.redux.notes.executor.DiskIoThreadExecutor
+import com.github.rozag.redux.notes.executor.MainThreadExecutor
+import com.github.rozag.redux.notes.executor.NetworkIoThreadExecutor
 import com.github.rozag.redux.notes.logger.Logger
 import com.github.rozag.redux.notes.logger.ReleaseTree
 import com.github.rozag.redux.notes.logger.TimberLogger
@@ -43,7 +46,10 @@ class NotesApplication : Application() {
         val notesDao = notesDatabase.notesDao()
         val localNotesRepo = LocalNotesRepository(notesDao)
         val remoteNotesRepo = FakeRemoteNotesRepository(sleepMillis = 3000)
-        val notesRepo = CompositeNotesRepository(localNotesRepo, remoteNotesRepo)
+        val notesRepo = CompositeNotesRepository(
+                localRepo = localNotesRepo,
+                remoteRepo = remoteNotesRepo
+        )
 
         // Initialize the store
         store = BufferedSubscribableStore(
@@ -52,11 +58,21 @@ class NotesApplication : Application() {
                 bufferSizeLimit = 2,
                 initialBufferSize = 2
         )
-        val loggingMiddleware = LoggingMiddleware(logger)
+        val loggingMiddleware = LoggingMiddleware(logger = logger)
         store.applyMiddleware(loggingMiddleware)
 
+        // Initialize executors
+        val mainThreadExecutor = MainThreadExecutor()
+        val diskIoThreadExecutor = DiskIoThreadExecutor()
+        val networkIoThreadExecutor = NetworkIoThreadExecutor(threadCount = 3)
+
         // Initialize action creators
-        loadNotesActionCreator = LoadNotesActionCreator(store, notesRepo)
+        loadNotesActionCreator = LoadNotesActionCreator(
+                workExecutor = diskIoThreadExecutor,
+                callbackExecutor = mainThreadExecutor,
+                store = store,
+                repo = notesRepo
+        )
     }
 
 }

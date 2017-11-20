@@ -10,7 +10,7 @@ import android.arch.persistence.room.PrimaryKey
         indices = arrayOf(Index(value = COLUMN_ID, unique = true))
 )
 data class NoteEntity(
-        @PrimaryKey @ColumnInfo(name = COLUMN_ID) val id: String,
-        @ColumnInfo(name = COLUMN_TITLE) val title: String,
-        @ColumnInfo(name = COLUMN_BODY) val body: String
+        @PrimaryKey @ColumnInfo(name = COLUMN_ID) var id: String = "",
+        @ColumnInfo(name = COLUMN_TITLE) var title: String = "",
+        @ColumnInfo(name = COLUMN_BODY) var body: String = ""
 )

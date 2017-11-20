@@ -1,4 +1,4 @@
-package com.github.rozag.redux.notes.repository
+package com.github.rozag.redux.notes
 
 import java.util.*
 

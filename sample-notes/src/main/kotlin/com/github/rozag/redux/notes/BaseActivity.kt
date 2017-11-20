@@ -36,8 +36,8 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         if (layoutResourceId != 0) {
             setContentView(layoutResourceId)
+            setUpToolbar()
         }
-        setUpToolbar()
     }
 
     protected fun setUpToolbar() {

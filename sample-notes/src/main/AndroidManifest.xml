@@ -12,7 +12,7 @@
         android:theme="@style/Theme.App">
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".screen.splash.SplashActivity"
             android:theme="@style/Theme.Splash">
 
             <intent-filter>
@@ -22,7 +22,7 @@
 
         </activity>
 
-        <activity android:name=".NotesListActivity"/>
+        <activity android:name=".screen.list.NotesListActivity"/>
 
     </application>
 

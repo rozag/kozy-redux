@@ -1,6 +1,8 @@
-package com.github.rozag.redux.notes
+package com.github.rozag.redux.notes.screen.list
 
 import android.os.Bundle
+import com.github.rozag.redux.notes.BaseActivity
+import com.github.rozag.redux.notes.R
 
 class NotesListActivity : BaseActivity() {
 

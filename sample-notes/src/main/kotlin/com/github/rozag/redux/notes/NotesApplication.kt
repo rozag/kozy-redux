@@ -2,26 +2,23 @@ package com.github.rozag.redux.notes
 
 import android.app.Application
 import android.arch.persistence.room.Room
+import com.github.rozag.kueue.Kueue
+import com.github.rozag.kueue.android.MainThreadExecutor
 import com.github.rozag.redux.base.BufferedSubscribableStore
 import com.github.rozag.redux.notes.database.DB_NAME
 import com.github.rozag.redux.notes.database.NotesDatabase
-import com.github.rozag.redux.notes.executor.DiskIoThreadExecutor
-import com.github.rozag.redux.notes.executor.MainThreadExecutor
-import com.github.rozag.redux.notes.executor.NetworkIoThreadExecutor
-import com.github.rozag.redux.notes.logger.Logger
-import com.github.rozag.redux.notes.logger.ReleaseTree
-import com.github.rozag.redux.notes.logger.TimberLogger
 import com.github.rozag.redux.notes.middleware.LoggingMiddleware
 import com.github.rozag.redux.notes.repository.CompositeNotesRepository
 import com.github.rozag.redux.notes.repository.FakeRemoteNotesRepository
 import com.github.rozag.redux.notes.repository.LocalNotesRepository
 import com.github.rozag.redux.notes.screen.list.LoadNotesActionCreator
+import com.github.rozag.redux.notes.timber.ReleaseTree
 import timber.log.Timber
+import java.util.concurrent.Executors
 
 class NotesApplication : Application() {
 
     companion object {
-        lateinit var logger: Logger
         lateinit var store: Store
         lateinit var loadNotesActionCreator: ActionCreator
     }
@@ -35,7 +32,6 @@ class NotesApplication : Application() {
         } else {
             Timber.plant(ReleaseTree())
         }
-        logger = TimberLogger()
 
         // Initialize repositories
         val notesDatabase = Room.databaseBuilder(
@@ -58,18 +54,20 @@ class NotesApplication : Application() {
                 bufferSizeLimit = 2,
                 initialBufferSize = 2
         )
-        val loggingMiddleware = LoggingMiddleware(logger = logger)
+        val loggingMiddleware = LoggingMiddleware()
         store.applyMiddleware(loggingMiddleware)
 
         // Initialize executors
         val mainThreadExecutor = MainThreadExecutor()
-        val diskIoThreadExecutor = DiskIoThreadExecutor()
-        val networkIoThreadExecutor = NetworkIoThreadExecutor(threadCount = 3)
+        val diskIoThreadExecutor = Executors.newSingleThreadExecutor()
+//        val networkIoThreadExecutor = Executors.newFixedThreadPool(3)
+
+        // Initialize task queues
+        val taskQueue = Kueue(diskIoThreadExecutor, mainThreadExecutor)
 
         // Initialize action creators
         loadNotesActionCreator = LoadNotesActionCreator(
-                workExecutor = diskIoThreadExecutor,
-                callbackExecutor = mainThreadExecutor,
+                queue = taskQueue,
                 store = store,
                 repo = notesRepo
         )

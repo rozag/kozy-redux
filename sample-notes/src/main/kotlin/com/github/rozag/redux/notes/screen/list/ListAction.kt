@@ -8,7 +8,7 @@ sealed class ListAction : Action.Screen() {
     sealed class LoadNotes : ListAction() {
         class Started : LoadNotes()
         data class Success(val notes: List<Note>) : LoadNotes()
-        data class Error(val throwable: Throwable) : LoadNotes()
+        class Error : LoadNotes()
     }
 
     class TearDown : ListAction()

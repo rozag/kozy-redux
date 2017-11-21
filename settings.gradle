@@ -1,1 +1,1 @@
-include ':sample-counter', ':libbase', ':libcore', ':sample-counter-buffered', ':sample-notes'
+include ':sample-counter', ':libbase', ':libcore', ':sample-counter-buffered', ':sample-notes', ':kueue', ':kueue-android'

@@ -1,4 +1,4 @@
-package com.github.rozag.redux.notes.logger
+package com.github.rozag.redux.notes.timber
 
 import android.annotation.SuppressLint
 import android.util.Log

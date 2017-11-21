@@ -2,7 +2,7 @@ package com.github.rozag.redux.notes.screen.list
 
 import android.os.Bundle
 import com.github.rozag.redux.notes.*
-import com.github.rozag.redux.notes.logger.Logger
+import timber.log.Timber
 
 class ListActivity : ReduxActivity() {
 
@@ -12,7 +12,6 @@ class ListActivity : ReduxActivity() {
     override val homeButtonEnabled = false
 
     private val loadNotesActionCreator: ActionCreator = NotesApplication.loadNotesActionCreator
-    private val logger: Logger = NotesApplication.logger
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +25,7 @@ class ListActivity : ReduxActivity() {
 
     override fun onNewState(state: State) {
         // TODO
-        logger.d("onNewState: $state")
+        Timber.d("onNewState: $state")
     }
 
 }

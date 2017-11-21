@@ -1,4 +1,4 @@
-package com.github.rozag.redux.notes.executor
+package com.github.rozag.kueue.android
 
 import android.os.Handler
 import android.os.Looper

@@ -18,6 +18,6 @@ class Kueue(
         }
     }
 
-    fun <T> perform(runTask: (onComplete: (T) -> Unit, onError: OnError) -> Unit) = Work(workerExecutor, callbackExecutor, runTask)
+    fun <T> perform(runTask: (onComplete: OnComplete<T>, onError: OnError) -> Unit) = Work(workerExecutor, callbackExecutor, runTask)
 
 }

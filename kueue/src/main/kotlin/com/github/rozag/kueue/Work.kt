@@ -5,14 +5,14 @@ import java.util.concurrent.Executor
 class Work<T> internal constructor(
         private val workerExecutor: Executor,
         private val callbackExecutor: Executor,
-        private val runTask: (onSuccess: (T) -> Unit, onError: OnError) -> Unit
+        private val runTask: (onComplete: (T) -> Unit, onError: OnError) -> Unit
 ) {
 
-    private var onSuccess: ((T) -> Unit)? = null
+    private var onComplete: ((T) -> Unit)? = null
     private var onError: OnError? = null
 
-    fun onSuccess(onSuccess: (T) -> Unit): Work<T> {
-        this.onSuccess = onSuccess
+    fun onComplete(onComplete: (T) -> Unit): Work<T> {
+        this.onComplete = onComplete
         return this
     }
 
@@ -23,17 +23,17 @@ class Work<T> internal constructor(
 
     fun go() {
         workerExecutor.execute {
-            runTask(wrapOnSuccess(onSuccess), wrapOnError(onError))
+            runTask(wrapOnComplete(onComplete), wrapOnError(onError))
         }
     }
 
-    private fun wrapOnSuccess(onSuccess: ((T) -> Unit)?): (T) -> Unit {
-        return if (onSuccess == null) {
+    private fun wrapOnComplete(onComplete: ((T) -> Unit)?): (T) -> Unit {
+        return if (onComplete == null) {
             {}
         } else {
             { result: T ->
                 callbackExecutor.execute {
-                    onSuccess(result)
+                    onComplete(result)
                 }
             }
         }

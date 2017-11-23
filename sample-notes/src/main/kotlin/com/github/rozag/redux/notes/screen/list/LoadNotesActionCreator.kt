@@ -15,7 +15,7 @@ class LoadNotesActionCreator(
     override fun createAndDispatch() {
         store.dispatch(ListAction.LoadNotes.Started())
         queue.fromCallable { repo.getNotes() }
-                .onSuccess { notes ->
+                .onComplete { notes ->
                     store.dispatch(ListAction.LoadNotes.Success(notes))
                 }
                 .onError { throwable ->

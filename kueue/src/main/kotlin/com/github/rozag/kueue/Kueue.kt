@@ -7,15 +7,17 @@ class Kueue(
         private val callbackExecutor: Executor
 ) {
 
-    fun <T> fromCallable(callable: () -> T) = perform<T> { onSuccess, onError ->
+    // TODO: tests
+
+    fun <T> fromCallable(callable: () -> T) = perform<T> { onComplete, onError ->
         try {
             val result = callable()
-            onSuccess(result)
+            onComplete(result)
         } catch (throwable: Throwable) {
             onError(throwable)
         }
     }
 
-    fun <T> perform(runTask: (onSuccess: (T) -> Unit, onError: OnError) -> Unit) = Work(workerExecutor, callbackExecutor, runTask)
+    fun <T> perform(runTask: (onComplete: (T) -> Unit, onError: OnError) -> Unit) = Work(workerExecutor, callbackExecutor, runTask)
 
 }

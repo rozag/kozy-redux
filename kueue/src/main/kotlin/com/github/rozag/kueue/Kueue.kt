@@ -7,8 +7,6 @@ class Kueue(
         private val callbackExecutor: Executor
 ) {
 
-    // TODO: tests
-
     fun <T> fromCallable(callable: () -> T) = perform<T> { onComplete, onError ->
         try {
             val result = callable()

@@ -3,6 +3,8 @@ apply plugin: "kotlin"
 // TODO: publish as a separate library
 
 dependencies {
+    testImplementation "junit:junit:${junitVersion}"
+
     // Kotlin specific dependencies
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:${kotlinVersion}"
 }

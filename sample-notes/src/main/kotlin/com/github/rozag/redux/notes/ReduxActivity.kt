@@ -2,7 +2,7 @@ package com.github.rozag.redux.notes
 
 import com.github.rozag.redux.base.ReduxSubscribableStore
 
-abstract class ReduxActivity : BaseActivity(), ReduxSubscribableStore.Subscriber<State> {
+abstract class ReduxActivity : BaseActivity(), ReduxSubscribableStore.Subscriber<AppState> {
 
     protected val store: Store = NotesApplication.store
 

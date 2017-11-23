@@ -18,12 +18,12 @@ class ListActivity : ReduxActivity() {
         loadNotesActionCreator.createAndDispatch()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onBackPressed() {
+        super.onBackPressed()
         store.dispatch(ListAction.TearDown())
     }
 
-    override fun onNewState(state: State) {
+    override fun onNewState(state: AppState) {
         // TODO
         Timber.d("onNewState: $state")
     }

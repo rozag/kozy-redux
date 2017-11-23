@@ -6,7 +6,7 @@ fun listReducer(state: ListState, action: ListAction): ListState = when (action)
             false,
             state.notes
     )
-    is ListAction.LoadNotes.Success -> ListState(
+    is ListAction.LoadNotes.Complete -> ListState(
             false,
             false,
             action.notes

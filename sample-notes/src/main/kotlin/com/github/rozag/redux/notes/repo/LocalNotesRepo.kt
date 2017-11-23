@@ -1,10 +1,10 @@
-package com.github.rozag.redux.notes.repository
+package com.github.rozag.redux.notes.repo
 
 import com.github.rozag.redux.notes.database.NoteEntity
 import com.github.rozag.redux.notes.database.NotesDao
 import com.github.rozag.redux.notes.model.Note
 
-class LocalNotesRepository(private val notesDao: NotesDao) : NotesRepository {
+class LocalNotesRepo(private val notesDao: NotesDao) : NotesRepo {
 
     override fun getNotes(): List<Note> = notesDao.getNotes().map(::noteFromEntity)
 

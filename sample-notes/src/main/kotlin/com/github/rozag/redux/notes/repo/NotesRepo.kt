@@ -1,8 +1,8 @@
-package com.github.rozag.redux.notes.repository
+package com.github.rozag.redux.notes.repo
 
 import com.github.rozag.redux.notes.model.Note
 
-interface NotesRepository {
+interface NotesRepo {
     fun getNotes(): List<Note>
     fun addNote(note: Note)
     fun updateNote(note: Note)

@@ -1,8 +1,8 @@
-package com.github.rozag.redux.notes.repository
+package com.github.rozag.redux.notes.repo
 
 import com.github.rozag.redux.notes.model.Note
 
-class FakeRemoteNotesRepository(private val sleepMillis: Long = 500) : NotesRepository {
+class FakeRemoteNotesRepo(private val sleepMillis: Long = 500) : NotesRepo {
 
     override fun getNotes(): List<Note> {
         Thread.sleep(sleepMillis)

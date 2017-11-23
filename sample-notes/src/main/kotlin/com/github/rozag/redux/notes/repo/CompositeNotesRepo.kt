@@ -1,15 +1,15 @@
-package com.github.rozag.redux.notes.repository
+package com.github.rozag.redux.notes.repo
 
 import com.github.rozag.redux.notes.model.Note
 
-class CompositeNotesRepository(
-        private val localRepo: NotesRepository,
-        private val remoteRepo: NotesRepository
-) : NotesRepository {
+class CompositeNotesRepo(
+        private val localRepo: NotesRepo,
+        private val remoteRepo: NotesRepo
+) : NotesRepo {
 
     override fun getNotes(): List<Note> {
         val remoteNotes = remoteRepo.getNotes()
-        val localNotes = remoteRepo.getNotes()
+        val localNotes = localRepo.getNotes()
         return localNotes.union(remoteNotes).toList()
     }
 

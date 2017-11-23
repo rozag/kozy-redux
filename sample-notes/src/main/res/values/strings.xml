@@ -2,4 +2,11 @@
 
     <string name="app_name">sample-notes</string>
 
+    <string name="initial_note_title_0">Test title 0</string>
+    <string name="initial_note_title_1">Test title 1</string>
+    <string name="initial_note_title_2">Test title 2</string>
+    <string name="initial_note_body_0">Test body 0</string>
+    <string name="initial_note_body_1">Test body 1</string>
+    <string name="initial_note_body_2">Test body 2</string>
+
 </resources>

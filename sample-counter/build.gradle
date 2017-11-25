@@ -73,9 +73,9 @@ android {
 }
 
 dependencies {
-    implementation project(':libcore')
-    implementation project(':libbase')
-//    implementation "com.github.rozag:kozy-redux-base:${publishVersion}"
+//    implementation project(':libcore')
+//    implementation project(':libbase')
+    implementation "com.github.rozag:kozy-redux-base:${publishVersion}"
 
     // Kotlin specific dependencies
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:${kotlinVersion}"

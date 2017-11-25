@@ -1,14 +1,11 @@
-package com.github.rozag.redux.base
+package com.github.rozag.redux.core.store
 
-import com.github.rozag.redux.base.ReduxSubscribableStore.Subscriber
-import com.github.rozag.redux.base.ReduxSubscribableStore.Subscription
 import com.github.rozag.redux.core.ReduxAction
 import com.github.rozag.redux.core.ReduxMiddleware
 import com.github.rozag.redux.core.ReduxState
-import com.github.rozag.redux.core.store.Store
 
 /**
- * An implementation of the [ReduxSubscribableStore] interface.
+ * An implementation of the [ReduxStore] interface.
  *
  * Typical usage:
  * * Define your state class.
@@ -37,24 +34,30 @@ import com.github.rozag.redux.core.store.Store
  * ```
  * * Create the store instance. **There should be only one store instance for an app!**
  * ```
- *         val store: ReduxSubscribableStore<MyState, MyAction> =
- *             SubscribableStore(MyState.INITIAL, ::rootReducer)
+ *         val store: ReduxStore<MyState, MyAction> = Store(MyState.INITIAL, ::rootReducer)
  * ```
- * * And now you can dispatch your actions to the store, subscribe on state updates,
- * apply your middleware, etc.
+ * * And now you can dispatch your actions to the store, apply your middleware, etc.
  *
  * @param S the type of your [ReduxState]
  * @param A the type of your root [ReduxAction]
- * @property currentState an initial [ReduxState] for your [SubscribableStore]
+ * @property currentState an initial [ReduxState] for your [ReduxStore]
  * @property reducer a pure function `(state, action) -> state`
- * @constructor creates new [SubscribableStore]
+ * @constructor creates new [Store]
  */
-open class SubscribableStore<S : ReduxState, A : ReduxAction>(
-        override var currentState: S,
-        override var reducer: (state: S, action: A) -> S
-) : Store<S, A>(currentState, reducer), ReduxSubscribableStore<S, A> {
+open class Store<S : ReduxState, A : ReduxAction>(
+        protected open var currentState: S,
+        open var reducer: (state: S, action: A) -> S
+) : ReduxStore<S, A> {
 
-    private val delegate = SubscribableDelegate<S>()
+    private var dispatchFun: (A) -> Unit = { action: A -> internalDispatch(action) }
+
+    override fun getState(): S = currentState
+
+    override fun replaceReducer(reducer: (state: S, action: A) -> S) {
+        this.reducer = reducer
+    }
+
+    override fun dispatch(action: A) = dispatchFun(action)
 
     /**
      * This method is called in order to dispatch an action. It is used to
@@ -62,11 +65,14 @@ open class SubscribableStore<S : ReduxState, A : ReduxAction>(
      *
      * @param action dispatched [ReduxAction]
      */
-    override fun internalDispatch(action: A) {
-        super.internalDispatch(action)
-        delegate.notifySubscribers(getState())
+    protected open fun internalDispatch(action: A) {
+        currentState = reducer(currentState, action)
     }
 
-    override fun subscribe(subscriber: Subscriber<S>): Subscription = delegate.subscribe(getState(), subscriber)
+    override fun applyMiddleware(vararg middlewareList: ReduxMiddleware<S, A, ReduxStore<S, A>>) {
+        middlewareList.forEach { middleware ->
+            dispatchFun = middleware.apply(this)(dispatchFun)
+        }
+    }
 
 }

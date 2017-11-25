@@ -1,4 +1,8 @@
-package com.github.rozag.redux.core
+package com.github.rozag.redux.core.store
+
+import com.github.rozag.redux.core.ReduxAction
+import com.github.rozag.redux.core.ReduxMiddleware
+import com.github.rozag.redux.core.ReduxState
 
 /**
  * [ReduxStore] is a core interface in a Redux paradigm. It holds your [ReduxState]

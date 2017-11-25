@@ -1,4 +1,7 @@
-package com.github.rozag.redux.core
+package com.github.rozag.redux.core.store
+
+import com.github.rozag.redux.core.ReduxAction
+import com.github.rozag.redux.core.ReduxState
 
 /**
  * Sometimes you want to keep a story of all your [ReduxState] and to jump back in time

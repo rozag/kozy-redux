@@ -2,7 +2,7 @@ package com.github.rozag.redux.counter
 
 import android.util.Log
 import com.github.rozag.redux.core.ReduxMiddleware
-import com.github.rozag.redux.core.ReduxStore
+import com.github.rozag.redux.core.store.ReduxStore
 
 class LoggingMiddleware(
         private val priority: Int = Log.DEBUG,

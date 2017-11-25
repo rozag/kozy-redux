@@ -2,15 +2,15 @@ package com.github.rozag.redux.counter.buffered
 
 import android.app.Application
 import android.util.Log
-import com.github.rozag.redux.base.BufferedSubscribableStore
-import com.github.rozag.redux.base.ReduxBufferedSubscribableStore
+import com.github.rozag.redux.base.ReduxSubscribableBufferedStore
+import com.github.rozag.redux.base.SubscribableBufferedStore
 
-typealias CounterStore = ReduxBufferedSubscribableStore<CounterState, CounterAction>
+typealias CounterStore = ReduxSubscribableBufferedStore<CounterState, CounterAction>
 
 class App : Application() {
 
     companion object {
-        val store: CounterStore = BufferedSubscribableStore(
+        val store: CounterStore = SubscribableBufferedStore(
                 CounterState.INITIAL,
                 ::rootReducer,
                 20

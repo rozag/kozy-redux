@@ -2,16 +2,16 @@ package com.github.rozag.redux.base
 
 import com.github.rozag.redux.base.ReduxSubscribableStore.Subscriber
 import com.github.rozag.redux.base.ReduxSubscribableStore.Subscription
-import com.github.rozag.redux.core.store.BufferedStore
 import com.github.rozag.redux.core.ReduxAction
-import com.github.rozag.redux.core.store.ReduxBufferedStore
 import com.github.rozag.redux.core.ReduxState
+import com.github.rozag.redux.core.store.BufferedStore
+import com.github.rozag.redux.core.store.ReduxBufferedStore
 
 /**
- * An implementation of [ReduxBufferedSubscribableStore] interface. It can do all the
- * things that [SubscribableStore] can, but this class also keeps a buffer of a limited
- * number of previous states (or all of them) and allows you to manipulate this buffer
- * via the [ReduxBufferedStore]'s methods.
+ * An implementation of [ReduxBufferedStore] and [ReduxSubscribableStore] interfaces.
+ * It can do all the things that [SubscribableStore] can, but this class also keeps
+ * a buffer of a limited number of previous states (or all of them) and allows you
+ * to manipulate this buffer via the [ReduxBufferedStore]'s methods.
  *
  * The usage of this store is the same as the [SubscribableStore]'s, but now you can
  * also manipulate the state history.

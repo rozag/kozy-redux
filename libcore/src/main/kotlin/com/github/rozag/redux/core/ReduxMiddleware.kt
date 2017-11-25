@@ -1,5 +1,7 @@
 package com.github.rozag.redux.core
 
+import com.github.rozag.redux.core.store.ReduxStore
+
 /**
  * This class is used to wrap the [ReduxStore.dispatch] method with
  * [doBeforeDispatch] and [doAfterDispatch] methods via

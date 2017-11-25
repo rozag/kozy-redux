@@ -3,7 +3,7 @@ package com.github.rozag.redux.base
 import com.github.rozag.redux.base.ReduxSubscribableStore.Subscriber
 import com.github.rozag.redux.core.ReduxAction
 import com.github.rozag.redux.core.ReduxState
-import com.github.rozag.redux.core.ReduxStore
+import com.github.rozag.redux.core.store.ReduxStore
 
 /**
  * An extension for the [ReduxStore] interface. Defines [subscribe] method

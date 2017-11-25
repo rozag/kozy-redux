@@ -5,12 +5,12 @@
 <p align="center">
   <a href="https://bintray.com/rozag/maven/kozy-redux-core/_latestVersion">
         <img 
-             src="https://img.shields.io/badge/kozy--redux--core-0.43-brightgreen.svg" 
+             src="https://img.shields.io/badge/kozy--redux--core-0.5-brightgreen.svg" 
              alt="kozy-redux-core">
   </a>
   <a href="https://bintray.com/rozag/maven/kozy-redux-base/_latestVersion">
         <img 
-             src="https://img.shields.io/badge/kozy--redux--base-0.43-brightgreen.svg" 
+             src="https://img.shields.io/badge/kozy--redux--base-0.5-brightgreen.svg" 
              alt="kozy-redux-base">
   </a>
   <a href="https://twitter.com/intent/tweet?text=Pure%20Kotlin%20Redux%20library%20for%20Android&url=https://github.com/rozag/kozy-redux&via=alexey_mileev&hashtags=Kotlin,Redux,AndroidDev">
@@ -46,7 +46,7 @@ Pure Kotlin redux library for Android. This library is being developed with seve
 Add the dependency to your application module's `build.gradle`.
 ```groovy
 dependencies {
-    implementation "com.github.rozag:kozy-redux-base:0.43"
+    implementation "com.github.rozag:kozy-redux-base:0.5"
 }
 ```
 
@@ -93,7 +93,7 @@ class MyApplication : Application() {
         val Store: MyStore = SubscribableStore(MyState.INITIAL, ::rootReducer)
         /* 
          * You can also use the 
-         *                      BufferedSubscribableStore(
+         *                      SubscribableBufferedStore(
          *                              MyState.INITIAL, 
          *                              ::rootReducer, 
          *                              MY_BUFFER_SIZE_LIMIT,
@@ -182,7 +182,7 @@ class WriteSmthToDbActionCreator(val store: MyStore, val db: MyDatabase) {
 
 ## Buffered store
 
-In some apps we need an undo-like functionality. Buffered store is a way to handle this kind of tasks. In `kozy-redux` buffered store looks like a `ReduxBufferedStore` [interface](https://github.com/rozag/kozy-redux/blob/master/libcore/src/main/kotlin/com/github/rozag/redux/core/ReduxBufferedStore.kt) and an implementation for it - a `BufferedSubscribableStore` [class](https://github.com/rozag/kozy-redux/blob/master/libbase/src/main/kotlin/com/github/rozag/redux/base/BufferedSubscribableStore.kt). The interface looks as following:
+In some apps we need an undo-like functionality. Buffered store is a way to handle this kind of tasks. In `kozy-redux` buffered store looks like a `ReduxBufferedStore` [interface](https://github.com/rozag/kozy-redux/blob/master/libcore/src/main/kotlin/com/github/rozag/redux/core/ReduxBufferedStore.kt) and an implementation for it - a `SubscribableBufferedStore` [class](https://github.com/rozag/kozy-redux/blob/master/libbase/src/main/kotlin/com/github/rozag/redux/base/store/SubscribableBufferedStore.kt). The interface looks as following:
 ```kotlin
 interface ReduxBufferedStore<S : ReduxState, A : ReduxAction> : ReduxStore<S, A> {
     fun bufferSizeLimit(): Int
@@ -206,7 +206,7 @@ Some of these methods are useful for testing, debugging or building a log when a
 
 Dependency | Description
 ---------- | -----------
-[kozy-redux-core](https://github.com/rozag/kozy-redux/tree/master/libcore) | Core interfaces. Usually you don't use this dependency, however it's useful for future library development.
+[kozy-redux-core](https://github.com/rozag/kozy-redux/tree/master/libcore) | Core interfaces and implementations of store and buffered store (without the subscriptions stuff). Usually you don't use this dependency, however it's useful for future library development.
 [kozy-redux-base](https://github.com/rozag/kozy-redux/tree/master/libbase) | This one is built on top of the `kozy-redux-core` and provides a subscribable store interface and 2 store implementations: a subscribable store and a buffered subscribable store.
 
 

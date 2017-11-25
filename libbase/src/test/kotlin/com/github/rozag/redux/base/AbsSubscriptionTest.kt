@@ -6,22 +6,12 @@ import com.github.rozag.redux.core.store.StoreTest
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
-import org.junit.Before
 import org.junit.Test
 
 @Suppress("FunctionName")
-abstract class AbsSubscriptionTest : StoreTest() {
+open class AbsSubscriptionTest : StoreTest() {
 
-    protected abstract val subscribableStore: ReduxSubscribableStore<TestState, TestAction>
-
-    @Before
-    override fun setUp() {
-        initialState = TestState(-2)
-        initialAction = TestAction(-1)
-        newState = TestState(-1)
-        reducer = { _, _ -> newState }
-        store = subscribableStore
-    }
+    protected lateinit var subscribableStore: ReduxSubscribableStore<TestState, TestAction>
 
     @Test
     fun subscriberSubscribed_subscriberReceivesCurrentState() {

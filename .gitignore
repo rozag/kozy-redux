@@ -116,3 +116,4 @@ annotations
 */.classpath
 */.project
 */.settings/
+.vscode/

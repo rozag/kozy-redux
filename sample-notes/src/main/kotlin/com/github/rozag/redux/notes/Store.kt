@@ -1,5 +1,5 @@
 package com.github.rozag.redux.notes
 
-import com.github.rozag.redux.base.ReduxBufferedSubscribableStore
+import com.github.rozag.redux.base.ReduxSubscribableBufferedStore
 
-typealias Store = ReduxBufferedSubscribableStore<AppState, Action>
+typealias Store = ReduxSubscribableBufferedStore<AppState, Action>

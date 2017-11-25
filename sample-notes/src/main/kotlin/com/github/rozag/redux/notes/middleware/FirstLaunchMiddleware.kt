@@ -2,7 +2,7 @@ package com.github.rozag.redux.notes.middleware
 
 import com.github.rozag.kueue.Kueue
 import com.github.rozag.redux.core.ReduxMiddleware
-import com.github.rozag.redux.core.ReduxStore
+import com.github.rozag.redux.core.store.ReduxStore
 import com.github.rozag.redux.notes.Action
 import com.github.rozag.redux.notes.AppState
 import com.github.rozag.redux.notes.IdGenerator

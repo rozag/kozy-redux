@@ -6,7 +6,7 @@ import android.content.Context
 import android.util.Log
 import com.github.rozag.kueue.Kueue
 import com.github.rozag.kueue.android.MainThreadExecutor
-import com.github.rozag.redux.base.BufferedSubscribableStore
+import com.github.rozag.redux.base.SubscribableBufferedStore
 import com.github.rozag.redux.notes.database.DB_NAME
 import com.github.rozag.redux.notes.database.NotesDatabase
 import com.github.rozag.redux.notes.middleware.FirstLaunchMiddleware
@@ -78,7 +78,7 @@ class NotesApplication : Application() {
         )
 
         // Initialize the store
-        store = BufferedSubscribableStore(
+        store = SubscribableBufferedStore(
                 initialState = AppState.EMPTY,
                 reducer = ::rootReducer,
                 bufferSizeLimit = 2,

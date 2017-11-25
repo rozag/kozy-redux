@@ -26,7 +26,7 @@ open class SubscribableBufferedStore<S : ReduxState, A : ReduxAction>(
         override var reducer: (state: S, action: A) -> S,
         override var bufferSizeLimit: Int = UNLIMITED,
         initialBufferSize: Int = 0
-) : BufferedStore<S, A>(initialState, reducer, bufferSizeLimit, initialBufferSize), ReduxSubscribableStore<S, A> {
+) : BufferedStore<S, A>(initialState, reducer, bufferSizeLimit, initialBufferSize), ReduxSubscribableBufferedStore<S, A> {
 
     private val delegate = SubscribableDelegate<S>()
 

@@ -1,8 +1,7 @@
-package com.github.rozag.redux.base
+package com.github.rozag.redux.core.store
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
+import com.github.rozag.redux.core.TestAction
+import com.github.rozag.redux.core.TestState
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -10,9 +9,9 @@ import org.junit.Test
 import java.util.*
 
 @Suppress("FunctionName")
-class BufferedSubscribableStoreTest : SubscribableStoreTest() {
+open class BufferedStoreTest : StoreTest() {
 
-    private lateinit var bufferedStore: ReduxBufferedSubscribableStore<TestState, TestAction>
+    protected lateinit var bufferedStore: ReduxBufferedStore<TestState, TestAction>
 
     private val initialBufferSizeLimit = 1
 
@@ -22,7 +21,7 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
         initialAction = TestAction(-1)
         newState = TestState(-1)
         reducer = { _, _ -> newState }
-        bufferedStore = BufferedSubscribableStore(initialState, reducer, initialBufferSizeLimit)
+        bufferedStore = BufferedStore(initialState, reducer, initialBufferSizeLimit)
         store = bufferedStore
     }
 
@@ -83,14 +82,14 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
         val initialBufferSizeLimit = 2
         bufferedStore.changeSizeLimit(initialBufferSizeLimit)
         bufferedStore.dispatch(initialAction) // Now the buffer size equals 2
-        val newBufferSizeLimit = BufferedSubscribableStore.UNLIMITED
+        val newBufferSizeLimit = BufferedStore.UNLIMITED
         bufferedStore.changeSizeLimit(newBufferSizeLimit)
         assertEquals(initialBufferSizeLimit, bufferedStore.currentBufferSize())
     }
 
     @Test
     fun bufferSizeLimitSetToUnlimited_bufferSizeIncreasesWhileActionsDispatched() {
-        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+        bufferedStore.changeSizeLimit(BufferedStore.UNLIMITED)
         for (i in 2..10) { // the loop starts from 2 because we already have an initial state
             bufferedStore.dispatch(initialAction)
             assertEquals(i, bufferedStore.currentBufferSize())
@@ -125,28 +124,6 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
     }
 
     @Test
-    fun severalActionsDispatched_subscriberReceivesSameAsGetStateReturns() {
-        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
-
-        val states = Array(10) { index -> TestState(index) }
-        val actions = Array(10) { index -> TestAction(index) }
-
-        bufferedStore.replaceReducer { _, action ->
-            states[actions.indexOf(action)]
-        }
-
-        bufferedStore.subscribe(object : ReduxSubscribableStore.Subscriber<TestState> {
-            override fun onNewState(state: TestState) {
-                assertEquals(state, bufferedStore.getState())
-            }
-        })
-
-        for (i in 0..actions.lastIndex) {
-            bufferedStore.dispatch(actions[i])
-        }
-    }
-
-    @Test
     fun severalActionsDispatched_bufferSizeNotOvercomesLimit() {
         val bufferSizeLimit = 5
         bufferedStore.changeSizeLimit(bufferSizeLimit)
@@ -167,7 +144,7 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
 
     @Test
     fun jumpToStateWithinBufferBounds_getStateReturnsCorrectState() {
-        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+        bufferedStore.changeSizeLimit(BufferedStore.UNLIMITED)
 
         val statesCount = 10
         val states = Array(statesCount) { index -> TestState(index) }
@@ -208,31 +185,8 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
     }
 
     @Test
-    fun subscriberSubscribed_subscriberReceivesLatestState() {
-        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
-        bufferedStore.dispatch(initialAction)
-
-        val subscriber = mock<ReduxSubscribableStore.Subscriber<TestState>>()
-        bufferedStore.subscribe(subscriber)
-        verify(subscriber, times(1)).onNewState(newState)
-    }
-
-    @Test
-    fun jumpToStateInvoked_subscriberReceivesSelectedState() {
-        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
-        bufferedStore.dispatch(initialAction)
-
-        val subscriber = mock<ReduxSubscribableStore.Subscriber<TestState>>()
-        bufferedStore.subscribe(subscriber)
-        verify(subscriber, times(1)).onNewState(newState)
-
-        bufferedStore.jumpToState(0)
-        verify(subscriber, times(1)).onNewState(initialState)
-    }
-
-    @Test
     fun resetBufferInvoked_bufferSizeEqualsOne() {
-        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+        bufferedStore.changeSizeLimit(BufferedStore.UNLIMITED)
         bufferedStore.dispatch(initialAction)
         assertEquals(2, bufferedStore.currentBufferSize())
 
@@ -242,25 +196,12 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
 
     @Test
     fun resetBufferInvoked_getStateReturnsInitialState() {
-        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+        bufferedStore.changeSizeLimit(BufferedStore.UNLIMITED)
         bufferedStore.dispatch(initialAction)
         assertEquals(2, bufferedStore.currentBufferSize())
 
         bufferedStore.resetBuffer(initialState)
         assertEquals(initialState, bufferedStore.getState())
-    }
-
-    @Test
-    fun resetBufferInvoked_subscriberNotified() {
-        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
-        bufferedStore.dispatch(initialAction)
-
-        val subscriber = mock<ReduxSubscribableStore.Subscriber<TestState>>()
-        bufferedStore.subscribe(subscriber)
-        verify(subscriber, times(1)).onNewState(newState)
-
-        bufferedStore.resetBuffer(initialState)
-        verify(subscriber, times(1)).onNewState(initialState)
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -324,19 +265,6 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
     }
 
     @Test
-    fun resetToStateInvoked_subscriberReceivesSelectedState() {
-        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
-        bufferedStore.dispatch(initialAction)
-
-        val subscriber = mock<ReduxSubscribableStore.Subscriber<TestState>>()
-        bufferedStore.subscribe(subscriber)
-        verify(subscriber, times(1)).onNewState(newState)
-
-        bufferedStore.resetToState(0)
-        verify(subscriber, times(1)).onNewState(initialState)
-    }
-
-    @Test
     fun resetToStateInvokedAfterStoreJumpedBack_bufferSizeChanges() {
         bufferedStore.changeSizeLimit(2)
         bufferedStore.dispatch(initialAction)
@@ -356,7 +284,7 @@ class BufferedSubscribableStoreTest : SubscribableStoreTest() {
 
     @Test
     fun bufferInvokedWithUnlimitedBuffer_correctStateListReturned() {
-        bufferedStore.changeSizeLimit(BufferedSubscribableStore.UNLIMITED)
+        bufferedStore.changeSizeLimit(BufferedStore.UNLIMITED)
         bufferedStore.dispatch(initialAction)
         bufferedStore.dispatch(initialAction)
         val expectedList = listOf(initialState, newState, newState)

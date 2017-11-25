@@ -1,9 +1,11 @@
 package com.github.rozag.redux.base
 
+import com.github.rozag.redux.base.ReduxSubscribableStore.Subscriber
+import com.github.rozag.redux.base.ReduxSubscribableStore.Subscription
 import com.github.rozag.redux.core.ReduxAction
 import com.github.rozag.redux.core.ReduxMiddleware
 import com.github.rozag.redux.core.ReduxState
-import com.github.rozag.redux.core.ReduxStore
+import com.github.rozag.redux.core.store.Store
 
 /**
  * An implementation of the [ReduxSubscribableStore] interface.
@@ -48,20 +50,11 @@ import com.github.rozag.redux.core.ReduxStore
  * @constructor creates new [SubscribableStore]
  */
 open class SubscribableStore<S : ReduxState, A : ReduxAction>(
-        private var currentState: S,
-        open var reducer: (state: S, action: A) -> S
-) : ReduxSubscribableStore<S, A> {
+        override var currentState: S,
+        override var reducer: (state: S, action: A) -> S
+) : Store<S, A>(currentState, reducer), ReduxSubscribableStore<S, A> {
 
-    private val subscriberList: MutableList<ReduxSubscribableStore.Subscriber<S>> = ArrayList()
-    private var dispatchFun: (A) -> Unit = { action: A -> internalDispatch(action) }
-
-    override fun getState(): S = currentState
-
-    override fun replaceReducer(reducer: (state: S, action: A) -> S) {
-        this.reducer = reducer
-    }
-
-    override fun dispatch(action: A) = dispatchFun(action)
+    private val delegate = SubscribableDelegate<S>()
 
     /**
      * This method is called in order to dispatch an action. It is used to
@@ -69,40 +62,11 @@ open class SubscribableStore<S : ReduxState, A : ReduxAction>(
      *
      * @param action dispatched [ReduxAction]
      */
-    protected open fun internalDispatch(action: A) {
-        currentState = reducer(currentState, action)
-        notifySubscribers()
+    override fun internalDispatch(action: A) {
+        super.internalDispatch(action)
+        delegate.notifySubscribers(getState())
     }
 
-    /**
-     * Invokes [ReduxSubscribableStore.Subscriber.onNewState] with the current
-     * [ReduxState] on each [ReduxSubscribableStore.Subscriber].
-     */
-    protected fun notifySubscribers() {
-        subscriberList.forEach { subscriber ->
-            subscriber.onNewState(getState())
-        }
-    }
-
-    override fun applyMiddleware(vararg middlewareList: ReduxMiddleware<S, A, ReduxStore<S, A>>) {
-        middlewareList.forEach { middleware ->
-            dispatchFun = middleware.apply(this)(dispatchFun)
-        }
-    }
-
-    override fun subscribe(subscriber: ReduxSubscribableStore.Subscriber<S>): ReduxSubscribableStore.Subscription {
-        // Add the subscriber to list
-        subscriberList.add(subscriber)
-
-        // Deliver the current state to the subscriber
-        subscriber.onNewState(getState())
-
-        // Return the connection
-        return object : ReduxSubscribableStore.Subscription {
-            override fun cancel() {
-                subscriberList.remove(subscriber)
-            }
-        }
-    }
+    override fun subscribe(subscriber: Subscriber<S>): Subscription = delegate.subscribe(getState(), subscriber)
 
 }

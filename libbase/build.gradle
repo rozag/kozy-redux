@@ -10,6 +10,9 @@ dependencies {
     testImplementation "org.mockito:mockito-core:${mockitoVersion}"
     testImplementation "com.nhaarman:mockito-kotlin:${mockitoKotlinVersion}"
 
+    // Core library tests
+    testImplementation project (path: ":libcore", configuration: "testArtifacts")
+
     // Kotlin specific dependencies
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:${kotlinVersion}"
 }

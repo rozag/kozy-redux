@@ -18,6 +18,16 @@ class EditActivity : ReduxActivity() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onResume() {
+        super.onResume()
+        overridePendingTransition(R.anim.slide_in_left, R.anim.stay)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        overridePendingTransition(R.anim.stay, R.anim.slide_out_right)
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
         isExiting = true

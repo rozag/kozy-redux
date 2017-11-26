@@ -40,7 +40,7 @@ class ListActivity : ReduxActivity() {
         recyclerView.layoutManager = layoutManager
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.addItemDecoration(StatusBarMarginItemDecoration(resources))
-        adapter = ListAdapter(emptyList()) { note ->
+        adapter = ListAdapter { note ->
             Snackbar.make(coordinatorLayout, "Clicked note id: ${note.id}", Snackbar.LENGTH_SHORT).show()
         }
         recyclerView.adapter = adapter
@@ -64,15 +64,13 @@ class ListActivity : ReduxActivity() {
                 progressBar.visibility = VISIBLE
                 recyclerView.visibility = INVISIBLE
             }
-            listState.isError -> {
-                progressBar.visibility = GONE
-                recyclerView.visibility = VISIBLE
-                Snackbar.make(coordinatorLayout, "Error", Snackbar.LENGTH_SHORT).show()
-            }
             else -> {
                 progressBar.visibility = GONE
                 recyclerView.visibility = VISIBLE
                 adapter.updateNotes(listState.notes)
+                if (listState.isError) {
+                    Snackbar.make(coordinatorLayout, "Error", Snackbar.LENGTH_SHORT).show()
+                }
             }
         }
     }

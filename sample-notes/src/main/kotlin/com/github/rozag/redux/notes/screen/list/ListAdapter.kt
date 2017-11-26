@@ -9,10 +9,9 @@ import com.github.rozag.redux.notes.model.Note
 import com.github.rozag.redux.notes.screen.list.holder.NoteViewHolder
 import com.github.rozag.redux.notes.screen.list.holder.TextViewHolder
 
-class ListAdapter(
-        private var notes: List<Note>,
-        private val onNoteClickListener: (Note) -> Unit
-) : RecyclerView.Adapter<NoteViewHolder>() {
+class ListAdapter(private val onNoteClickListener: (Note) -> Unit) : RecyclerView.Adapter<NoteViewHolder>() {
+
+    private var notes: List<Note> = emptyList()
 
     private val onItemClickListener: (Int) -> Unit = { adapterPosition ->
         onNoteClickListener(notes[adapterPosition])

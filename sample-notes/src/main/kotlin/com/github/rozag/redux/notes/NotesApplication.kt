@@ -19,12 +19,16 @@ import com.github.rozag.redux.notes.repo.LocalNotesRepo
 import com.github.rozag.redux.notes.resources.AndroidResProvider
 import com.github.rozag.redux.notes.resources.ResProvider
 import com.github.rozag.redux.notes.router.Router
-import com.github.rozag.redux.notes.screen.list.LoadNotesActionCreator
+import com.github.rozag.redux.notes.screen.list.creator.NewNoteActionCreator
+import com.github.rozag.redux.notes.screen.list.creator.LoadNotesActionCreator
 import com.github.rozag.redux.notes.timber.ReleaseTree
 import timber.log.Timber
 import java.util.concurrent.Executors
 
 class NotesApplication : Application() {
+
+    // TODO: notes deletion
+    // TODO: todo-notes
 
     companion object {
         private const val PREFS_NAME = "notes"
@@ -32,7 +36,10 @@ class NotesApplication : Application() {
         lateinit var resProvider: ResProvider
         lateinit var store: NotesStore
         lateinit var router: Router
+
+        // List screen action creators
         lateinit var loadNotesActionCreator: ActionCreator
+        lateinit var newNoteActionCreator: ActionCreator
     }
 
     override fun onCreate() {
@@ -99,11 +106,17 @@ class NotesApplication : Application() {
         // Initialize router
         router = Router(store)
 
-        // Initialize action creators
+        // Initialize list screen action creators
         loadNotesActionCreator = LoadNotesActionCreator(
                 queue = taskQueue,
                 store = store,
                 repo = notesRepo
+        )
+        newNoteActionCreator = NewNoteActionCreator(
+                idGenerator = idGenerator,
+                store = store,
+                repo = notesRepo,
+                taskQueue = taskQueue
         )
     }
 

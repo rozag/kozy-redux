@@ -1,9 +1,10 @@
-package com.github.rozag.redux.notes.screen.list
+package com.github.rozag.redux.notes.screen.list.creator
 
 import com.github.rozag.kueue.Kueue
 import com.github.rozag.redux.notes.ActionCreator
 import com.github.rozag.redux.notes.NotesStore
 import com.github.rozag.redux.notes.repo.NotesRepo
+import com.github.rozag.redux.notes.screen.list.ListAction
 import timber.log.Timber
 
 class LoadNotesActionCreator(

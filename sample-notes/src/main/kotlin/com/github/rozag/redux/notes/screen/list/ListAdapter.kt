@@ -6,10 +6,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.github.rozag.redux.notes.R
 import com.github.rozag.redux.notes.model.Note
+import com.github.rozag.redux.notes.resources.ResProvider
 import com.github.rozag.redux.notes.screen.list.holder.NoteViewHolder
 import com.github.rozag.redux.notes.screen.list.holder.TextViewHolder
 
-class ListAdapter(private val onNoteClickListener: (Note) -> Unit) : RecyclerView.Adapter<NoteViewHolder>() {
+class ListAdapter(
+        private val resProvider: ResProvider,
+        private val onNoteClickListener: (Note) -> Unit
+) : RecyclerView.Adapter<NoteViewHolder>() {
 
     private var notes: List<Note> = emptyList()
 
@@ -23,7 +27,7 @@ class ListAdapter(private val onNoteClickListener: (Note) -> Unit) : RecyclerVie
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.view_note_item, parent, false)
-        return TextViewHolder(itemView, onItemClickListener)
+        return TextViewHolder(itemView, onItemClickListener, resProvider)
     }
 
     override fun getItemCount(): Int = notes.size
@@ -31,8 +35,8 @@ class ListAdapter(private val onNoteClickListener: (Note) -> Unit) : RecyclerVie
     fun updateNotes(notes: List<Note>) {
         val oldNotes = this.notes
         this.notes = notes
-        val diffResult = DiffUtil.calculateDiff(ListDiffUtilCallback(oldNotes, notes));
-        diffResult.dispatchUpdatesTo(this);
+        val diffResult = DiffUtil.calculateDiff(ListDiffUtilCallback(oldNotes, notes))
+        diffResult.dispatchUpdatesTo(this)
     }
 
 }

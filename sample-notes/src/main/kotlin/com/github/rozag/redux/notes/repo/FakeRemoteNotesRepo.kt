@@ -10,15 +10,12 @@ class FakeRemoteNotesRepo(private val sleepMillis: Long = 500) : NotesRepo {
     }
 
     override fun addNote(note: Note) {
-        Thread.sleep(sleepMillis)
     }
 
     override fun updateNote(note: Note) {
-        Thread.sleep(sleepMillis)
     }
 
     override fun deleteNote(note: Note) {
-        Thread.sleep(sleepMillis)
     }
 
 }

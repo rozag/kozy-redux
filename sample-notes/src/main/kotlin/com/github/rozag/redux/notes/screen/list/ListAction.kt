@@ -11,6 +11,12 @@ sealed class ListAction : NotesAction.Screen() {
         class Error : LoadNotes()
     }
 
+    class ErrorShown : ListAction()
+
+    data class Create(val note: Note) : ListAction()
+
+    data class Edit(val note: Note) : ListAction()
+
     class TearDown : ListAction()
 
 }

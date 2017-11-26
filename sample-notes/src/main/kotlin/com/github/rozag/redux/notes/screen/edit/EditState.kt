@@ -1,7 +1,9 @@
 package com.github.rozag.redux.notes.screen.edit
 
-data class EditState(val tmp: Int) {
+import com.github.rozag.redux.notes.model.Note
+
+data class EditState(val note: Note) {
     companion object {
-        val EMPTY: EditState = EditState(0)
+        val EMPTY: EditState = EditState(Note.EMPTY)
     }
 }

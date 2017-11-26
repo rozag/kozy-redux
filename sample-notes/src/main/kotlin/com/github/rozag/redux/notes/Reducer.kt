@@ -11,11 +11,7 @@ fun rootReducer(state: AppState, action: NotesAction): AppState = when (action) 
     is NotesAction.FirstLaunch -> firstLaunchReducer(state, action)
     is NotesAction.TearDown -> AppState.EMPTY
     is NotesAction.Screen -> when (action) {
-        is ListAction -> AppState(
-                state.routerState,
-                listReducer(state.listState, action),
-                state.editState
-        )
+        is ListAction -> listReducer(state, action)
         is EditAction -> AppState(
                 state.routerState,
                 state.listState,

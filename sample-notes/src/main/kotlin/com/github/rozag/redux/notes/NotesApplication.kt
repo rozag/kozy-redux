@@ -34,8 +34,11 @@ class NotesApplication : Application() {
     companion object {
         private const val PREFS_NAME = "notes"
         lateinit var prefs: Prefs
+
         lateinit var resProvider: ResProvider
+
         lateinit var store: NotesStore
+
         lateinit var router: Router
 
         // List screen action creators
@@ -98,7 +101,10 @@ class NotesApplication : Application() {
                 initialBufferSize = 2
         )
         store.applyMiddleware(
-                LoggingMiddleware(logLevel = Log.VERBOSE),
+                LoggingMiddleware(
+                        logLevel = Log.VERBOSE,
+                        packageName = packageName.replace(".debug", "")
+                ),
                 FirstLaunchMiddleware(
                         idGenerator = idGenerator,
                         resProvider = resProvider,

@@ -1,8 +1,13 @@
 package com.github.rozag.redux.notes.screen.list
 
 fun listReducer(state: ListState, action: ListAction): ListState = when (action) {
+    is ListAction.LoadNotes -> loadNotesReducer(state, action)
+    is ListAction.TearDown -> ListState.EMPTY
+}
+
+fun loadNotesReducer(state: ListState, action: ListAction.LoadNotes): ListState = when (action) {
     is ListAction.LoadNotes.Started -> ListState(
-            true,
+            state.notes.isEmpty(),
             false,
             state.notes
     )
@@ -16,5 +21,4 @@ fun listReducer(state: ListState, action: ListAction): ListState = when (action)
             true,
             state.notes
     )
-    is ListAction.TearDown -> ListState.EMPTY
 }

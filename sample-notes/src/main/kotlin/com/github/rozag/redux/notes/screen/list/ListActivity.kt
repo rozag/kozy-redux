@@ -7,6 +7,8 @@ import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View.*
+import android.widget.ProgressBar
 import com.github.rozag.redux.notes.*
 
 class ListActivity : ReduxActivity() {
@@ -20,6 +22,7 @@ class ListActivity : ReduxActivity() {
 
     private lateinit var coordinatorLayout: CoordinatorLayout
     private lateinit var recyclerView: RecyclerView
+    private lateinit var progressBar: ProgressBar
     private lateinit var addNoteButton: FloatingActionButton
 
     private lateinit var layoutManager: LinearLayoutManager
@@ -30,6 +33,7 @@ class ListActivity : ReduxActivity() {
 
         coordinatorLayout = findViewById(R.id.coordinator_layout)
         recyclerView = findViewById(R.id.recycler_view)
+        progressBar = findViewById(R.id.progress_bar)
         addNoteButton = findViewById(R.id.add_note_btn)
 
         layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -56,15 +60,17 @@ class ListActivity : ReduxActivity() {
         val listState = state.listState
         when {
             listState.isLoading -> {
-                // TODO: show/hide views
-                // TODO: show progress bar
+                progressBar.visibility = VISIBLE
+                recyclerView.visibility = INVISIBLE
             }
             listState.isError -> {
-                // TODO: show/hide views
-                // TODO: show error text
+                progressBar.visibility = GONE
+                recyclerView.visibility = VISIBLE
+                Snackbar.make(coordinatorLayout, "Error", Snackbar.LENGTH_SHORT).show()
             }
             else -> {
-                // TODO: show/hide views
+                progressBar.visibility = GONE
+                recyclerView.visibility = VISIBLE
                 adapter.updateNotes(listState.notes)
             }
         }

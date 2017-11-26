@@ -6,13 +6,13 @@ data class RouterState(
 ) {
 
     enum class Screen {
-        None,
-        List,
-        Edit
+        NONE,
+        LIST,
+        EDIT
     }
 
     companion object {
-        val EMPTY: RouterState = RouterState(Screen.None, Screen.None)
+        val EMPTY: RouterState = RouterState(Screen.NONE, Screen.NONE)
     }
 
 }

@@ -33,7 +33,7 @@ class SplashActivity : ReduxActivity() {
 
     override fun onNewState(state: AppState) {
         super.onNewState(state)
-        if (state.routerState.currentScreen != RouterState.Screen.None) {
+        if (state.routerState.currentScreen != RouterState.Screen.NONE) {
             finish()
         }
     }

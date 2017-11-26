@@ -10,15 +10,15 @@ class Router(private val store: NotesStore) {
 
     fun showScreenIfNeeded(activityContext: Context, screen: RouterState.Screen) {
         when (screen) {
-            RouterState.Screen.List -> {
+            RouterState.Screen.LIST -> {
                 activityContext.start(ListActivity::class.java)
                 store.dispatch(RouterAction.Shown.List())
             }
-            RouterState.Screen.Edit -> {
+            RouterState.Screen.EDIT -> {
                 activityContext.start(EditActivity::class.java)
                 store.dispatch(RouterAction.Shown.Edit())
             }
-            RouterState.Screen.None -> Unit
+            RouterState.Screen.NONE -> Unit
         }
     }
 

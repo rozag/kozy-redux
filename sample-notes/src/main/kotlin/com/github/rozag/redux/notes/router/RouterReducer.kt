@@ -9,11 +9,11 @@ fun routerReducer(state: RouterState, action: NotesAction.RouterAction): RouterS
 }
 
 private fun openReducer(state: RouterState, action: RouterAction.Open): RouterState = when (action) {
-    is RouterAction.Open.List -> RouterState(state.currentScreen, RouterState.Screen.List)
-    is RouterAction.Open.Edit -> RouterState(state.currentScreen, RouterState.Screen.Edit)
+    is RouterAction.Open.List -> RouterState(state.currentScreen, RouterState.Screen.LIST)
+    is RouterAction.Open.Edit -> RouterState(state.currentScreen, RouterState.Screen.EDIT)
 }
 
 private fun shownReducer(state: RouterState, action: RouterAction.Shown): RouterState = when (action) {
-    is RouterAction.Shown.List -> RouterState(RouterState.Screen.List, RouterState.Screen.None)
-    is RouterAction.Shown.Edit -> RouterState(RouterState.Screen.Edit, RouterState.Screen.None)
+    is RouterAction.Shown.List -> RouterState(RouterState.Screen.LIST, RouterState.Screen.NONE)
+    is RouterAction.Shown.Edit -> RouterState(RouterState.Screen.EDIT, RouterState.Screen.NONE)
 }

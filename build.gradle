@@ -36,6 +36,7 @@ buildscript {
         supportLibraryVersion = "27.0.1"
         timberVersion = "4.6.0"
         roomVersion = "1.0.0"
+        kueueVersion = "1.0"
     }
 
     repositories {

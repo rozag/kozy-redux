@@ -15,4 +15,6 @@
     <color name="divider">#bdbdbd</color>
     <color name="window_bg">#eeeeee</color>
 
+    <color name="white">#ffffff</color>
+
 </resources>

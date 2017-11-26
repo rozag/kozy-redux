@@ -1,0 +1,17 @@
+<LinearLayout
+    style="@style/ListItem"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/note_title_tv"
+        style="@style/Title"
+        tools:text="Note title"/>
+
+    <TextView
+        android:id="@+id/note_body_tv"
+        style="@style/Body"
+        tools:text="Note body"/>
+
+</LinearLayout>

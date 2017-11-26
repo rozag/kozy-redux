@@ -26,7 +26,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_add_note"
-        android:tint="@color/white"
+        android:tint="@color/icons"
         app:fabSize="normal"
         app:rippleColor="@color/accent_dark"/>
 

@@ -39,6 +39,7 @@ class ListActivity : ReduxActivity() {
         layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = layoutManager
         recyclerView.itemAnimator = DefaultItemAnimator()
+        recyclerView.addItemDecoration(StatusBarMarginItemDecoration(resources))
         adapter = ListAdapter(emptyList()) { note ->
             Snackbar.make(coordinatorLayout, "Clicked note id: ${note.id}", Snackbar.LENGTH_SHORT).show()
         }

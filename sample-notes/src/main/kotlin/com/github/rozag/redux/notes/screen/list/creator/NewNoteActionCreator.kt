@@ -1,7 +1,6 @@
 package com.github.rozag.redux.notes.screen.list.creator
 
 import com.github.rozag.kueue.Kueue
-import com.github.rozag.redux.notes.ActionCreator
 import com.github.rozag.redux.notes.IdGenerator
 import com.github.rozag.redux.notes.NotesStore
 import com.github.rozag.redux.notes.model.Note
@@ -15,9 +14,9 @@ class NewNoteActionCreator(
         private val store: NotesStore,
         private val repo: NotesRepo,
         private val taskQueue: Kueue
-) : ActionCreator {
+) {
 
-    override fun createAndDispatch() {
+    fun createAndDispatch() {
         taskQueue.fromCallable {
             val note = Note(idGenerator.generateId(), "", "")
             repo.addNote(note)

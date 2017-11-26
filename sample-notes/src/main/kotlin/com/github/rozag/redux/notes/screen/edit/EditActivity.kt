@@ -2,10 +2,8 @@ package com.github.rozag.redux.notes.screen.edit
 
 import android.os.Bundle
 import android.widget.EditText
-import com.github.rozag.redux.notes.AppState
-import com.github.rozag.redux.notes.R
-import com.github.rozag.redux.notes.ReduxActivity
-import com.github.rozag.redux.notes.statusBarHeight
+import com.github.rozag.redux.notes.*
+import com.github.rozag.redux.notes.router.RouterAction
 
 class EditActivity : ReduxActivity() {
 
@@ -13,6 +11,8 @@ class EditActivity : ReduxActivity() {
     override val toolbarTitleId = R.string.edit_note
     override val displayHomeAsUp = true
     override val homeButtonEnabled = true
+
+    private val updateNoteActionCreator = NotesApplication.updateNoteActionCreator
 
     private lateinit var titleEditText: EditText
     private lateinit var bodyEditText: EditText
@@ -47,8 +47,13 @@ class EditActivity : ReduxActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        updateNoteActionCreator.createAndDispatch(
+                title = titleEditText.text.toString().trim(),
+                body = bodyEditText.text.toString().trim()
+        )
         isExiting = true
         store.dispatch(EditAction.TearDown())
+        store.dispatch(RouterAction.Closed.Edit())
     }
 
     override fun onNewState(state: AppState) {

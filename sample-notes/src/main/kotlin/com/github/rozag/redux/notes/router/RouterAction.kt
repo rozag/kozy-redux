@@ -14,4 +14,9 @@ sealed class RouterAction : NotesAction.RouterAction() {
         class Edit : Shown()
     }
 
+    sealed class Closed : RouterAction() {
+        class List : Closed()
+        class Edit : Closed()
+    }
+
 }

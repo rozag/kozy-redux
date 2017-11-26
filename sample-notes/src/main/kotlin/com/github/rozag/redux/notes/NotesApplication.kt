@@ -19,8 +19,9 @@ import com.github.rozag.redux.notes.repo.LocalNotesRepo
 import com.github.rozag.redux.notes.resources.AndroidResProvider
 import com.github.rozag.redux.notes.resources.ResProvider
 import com.github.rozag.redux.notes.router.Router
-import com.github.rozag.redux.notes.screen.list.creator.NewNoteActionCreator
+import com.github.rozag.redux.notes.screen.edit.creator.UpdateNoteActionCreator
 import com.github.rozag.redux.notes.screen.list.creator.LoadNotesActionCreator
+import com.github.rozag.redux.notes.screen.list.creator.NewNoteActionCreator
 import com.github.rozag.redux.notes.timber.ReleaseTree
 import timber.log.Timber
 import java.util.concurrent.Executors
@@ -38,8 +39,11 @@ class NotesApplication : Application() {
         lateinit var router: Router
 
         // List screen action creators
-        lateinit var loadNotesActionCreator: ActionCreator
-        lateinit var newNoteActionCreator: ActionCreator
+        lateinit var loadNotesActionCreator: LoadNotesActionCreator
+        lateinit var newNoteActionCreator: NewNoteActionCreator
+
+        // Edit screen action creators
+        lateinit var updateNoteActionCreator: UpdateNoteActionCreator
     }
 
     override fun onCreate() {
@@ -114,6 +118,13 @@ class NotesApplication : Application() {
         )
         newNoteActionCreator = NewNoteActionCreator(
                 idGenerator = idGenerator,
+                store = store,
+                repo = notesRepo,
+                taskQueue = taskQueue
+        )
+
+        // Initialize edit screen action creators
+        updateNoteActionCreator = UpdateNoteActionCreator(
                 store = store,
                 repo = notesRepo,
                 taskQueue = taskQueue

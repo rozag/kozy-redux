@@ -12,11 +12,7 @@ fun rootReducer(state: AppState, action: NotesAction): AppState = when (action) 
     is NotesAction.TearDown -> AppState.EMPTY
     is NotesAction.Screen -> when (action) {
         is ListAction -> listReducer(state, action)
-        is EditAction -> AppState(
-                state.routerState,
-                state.listState,
-                editReducer(state.editState, action)
-        )
+        is EditAction -> editReducer(state, action)
         else -> throw NotImplementedError("Never happens")
     }
     is NotesAction.RouterAction -> AppState(

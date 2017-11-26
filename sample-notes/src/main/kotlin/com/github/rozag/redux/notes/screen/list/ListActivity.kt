@@ -10,7 +10,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.ProgressBar
-import com.github.rozag.redux.notes.*
+import com.github.rozag.redux.notes.AppState
+import com.github.rozag.redux.notes.NotesApplication
+import com.github.rozag.redux.notes.R
+import com.github.rozag.redux.notes.ReduxActivity
 import com.github.rozag.redux.notes.resources.ResProvider
 import com.github.rozag.redux.notes.router.RouterAction
 
@@ -22,8 +25,8 @@ class ListActivity : ReduxActivity() {
     override val homeButtonEnabled = false
 
     private val resProvider: ResProvider = NotesApplication.resProvider
-    private val loadNotesActionCreator: ActionCreator = NotesApplication.loadNotesActionCreator
-    private val newNoteActionCreator: ActionCreator = NotesApplication.newNoteActionCreator
+    private val loadNotesActionCreator = NotesApplication.loadNotesActionCreator
+    private val newNoteActionCreator = NotesApplication.newNoteActionCreator
 
     private lateinit var coordinatorLayout: CoordinatorLayout
     private lateinit var recyclerView: RecyclerView
@@ -64,6 +67,7 @@ class ListActivity : ReduxActivity() {
         super.onBackPressed()
         isExiting = true
         store.dispatch(ListAction.TearDown())
+        store.dispatch(RouterAction.Closed.List())
     }
 
     override fun onNewState(state: AppState) {

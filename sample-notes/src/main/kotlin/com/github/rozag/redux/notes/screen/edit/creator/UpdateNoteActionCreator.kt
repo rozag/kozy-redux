@@ -1,0 +1,28 @@
+package com.github.rozag.redux.notes.screen.edit.creator
+
+import com.github.rozag.kueue.Kueue
+import com.github.rozag.redux.notes.NotesStore
+import com.github.rozag.redux.notes.model.Note
+import com.github.rozag.redux.notes.repo.NotesRepo
+import com.github.rozag.redux.notes.screen.edit.EditAction
+import timber.log.Timber
+
+class UpdateNoteActionCreator(
+        private val store: NotesStore,
+        private val repo: NotesRepo,
+        private val taskQueue: Kueue
+) {
+
+    fun createAndDispatch(title: String, body: String) {
+        taskQueue.fromCallable {
+            val oldNote = store.getState().editState.note
+            val updatedNote = Note(oldNote.id, title, body)
+            repo.updateNote(updatedNote)
+            updatedNote
+        }
+                .onComplete { note -> store.dispatch(EditAction.NoteUpdated(note)) }
+                .onError { throwable -> Timber.e(throwable) }
+                .go()
+    }
+
+}

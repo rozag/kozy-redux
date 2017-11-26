@@ -5,6 +5,7 @@
 
     <style name="Theme.App.Base"
            parent="Theme.AppCompat.Light.NoActionBar">
+
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
@@ -13,14 +14,18 @@
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@color/window_bg</item>
         <item name="android:windowTranslucentStatus">true</item>
+
     </style>
 
     <style name="Theme.Splash"
            parent="Theme.App">
+
         <item name="android:windowBackground">@drawable/bg_splash</item>
+
     </style>
 
     <style name="ListItem">
+
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
@@ -30,24 +35,67 @@
         <item name="android:paddingEnd">16dp</item>
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
+
     </style>
 
-    <style name="Title">
+    <style name="Label">
+
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/barlow_semi_condensed</item>
+
+    </style>
+
+    <style name="Label.Title"
+           parent="Label">
+
         <item name="android:maxLines">1</item>
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:fontFamily">@font/barlow_semi_condensed</item>
+
     </style>
 
-    <style name="Body">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+    <style name="Label.Body"
+           parent="Label">
+
         <item name="android:maxLines">3</item>
         <item name="android:textColor">@color/secondary_text</item>
         <item name="android:textSize">16sp</item>
+
+    </style>
+
+    <style name="Field">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">@font/barlow_semi_condensed</item>
+        <item name="android:inputType">textCapSentences</item>
+        <item name="android:background">@null</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+
+    </style>
+
+    <style name="Field.Title"
+           parent="Field">
+
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:hint">@string/hint_title</item>
+
+    </style>
+
+    <style name="Field.Body"
+           parent="Field">
+
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:inputType">textCapSentences|textMultiLine</item>
+        <item name="android:hint">@string/hint_body</item>
+
     </style>
 
 </resources>

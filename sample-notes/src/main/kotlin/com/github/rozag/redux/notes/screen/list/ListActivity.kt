@@ -7,7 +7,8 @@ import android.support.design.widget.Snackbar
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ProgressBar
 import com.github.rozag.redux.notes.*
 import com.github.rozag.redux.notes.router.RouterAction
@@ -72,11 +73,13 @@ class ListActivity : ReduxActivity() {
         when {
             listState.isLoading -> {
                 progressBar.visibility = VISIBLE
-                recyclerView.visibility = INVISIBLE
+                recyclerView.visibility = GONE
+                addNoteButton.visibility = GONE
             }
             else -> {
                 progressBar.visibility = GONE
                 recyclerView.visibility = VISIBLE
+                addNoteButton.visibility = VISIBLE
                 adapter.updateNotes(listState.notes)
                 if (listState.isError) {
                     Snackbar.make(coordinatorLayout, "Error", Snackbar.LENGTH_SHORT).show()

@@ -4,18 +4,27 @@ import android.os.Bundle
 import com.github.rozag.redux.notes.AppState
 import com.github.rozag.redux.notes.R
 import com.github.rozag.redux.notes.ReduxActivity
+import com.github.rozag.redux.notes.statusBarHeight
 
 class EditActivity : ReduxActivity() {
 
     override val layoutResourceId = R.layout.activity_edit
-    override val toolbarTitleId = 0
-    override val displayHomeAsUp = false
-    override val homeButtonEnabled = false
+    override val toolbarTitleId = R.string.edit_note
+    override val displayHomeAsUp = true
+    override val homeButtonEnabled = true
 
     private var isExiting = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        toolbar?.apply {
+            setPadding(
+                    paddingLeft,
+                    resources.statusBarHeight(),
+                    paddingRight,
+                    paddingBottom
+            )
+        }
     }
 
     override fun onResume() {

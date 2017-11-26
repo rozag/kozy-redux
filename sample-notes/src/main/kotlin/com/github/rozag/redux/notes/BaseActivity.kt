@@ -3,6 +3,7 @@ package com.github.rozag.redux.notes
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 
 /**
  * Simple base class for all activities in the app.
@@ -40,7 +41,7 @@ abstract class BaseActivity : AppCompatActivity() {
         }
     }
 
-    protected fun setUpToolbar() {
+    private fun setUpToolbar() {
         toolbar = findViewById(R.id.toolbar)
         if (toolbar != null) {
             setSupportActionBar(toolbar)
@@ -53,6 +54,15 @@ abstract class BaseActivity : AppCompatActivity() {
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(displayHomeAsUp)
             setHomeButtonEnabled(homeButtonEnabled)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
     }
 

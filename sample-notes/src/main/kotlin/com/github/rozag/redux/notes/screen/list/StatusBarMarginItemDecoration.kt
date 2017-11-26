@@ -4,15 +4,11 @@ import android.content.res.Resources
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.github.rozag.redux.notes.statusBarHeight
 
-class StatusBarMarginItemDecoration(private val resources: Resources) : RecyclerView.ItemDecoration() {
+class StatusBarMarginItemDecoration(resources: Resources) : RecyclerView.ItemDecoration() {
 
-    private val topMargin: Int
-
-    init {
-        val resId = resources.getIdentifier("status_bar_height", "dimen", "android")
-        topMargin = if (resId > 0) resources.getDimensionPixelSize(resId) else 0
-    }
+    private val topMargin = resources.statusBarHeight()
 
     override fun getItemOffsets(outRect: Rect,
                                 view: View,

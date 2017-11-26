@@ -1,14 +1,10 @@
 package com.github.rozag.redux.notes.router
 
 import android.content.Context
-import android.content.Intent
 import com.github.rozag.redux.notes.NotesStore
 import com.github.rozag.redux.notes.screen.edit.EditActivity
 import com.github.rozag.redux.notes.screen.list.ListActivity
-
-private fun <T> Context.start(cls: Class<T>) {
-    startActivity(Intent(this, cls))
-}
+import com.github.rozag.redux.notes.start
 
 class Router(private val store: NotesStore) {
 

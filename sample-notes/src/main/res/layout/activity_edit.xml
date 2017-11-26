@@ -1,7 +1,19 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="LabelFor">
+
+    <include layout="@layout/view_toolbar"/>
+
+    <EditText
+        android:id="@+id/title_et"
+        style="@style/Field.Title"/>
+
+    <EditText
+        android:id="@+id/body_et"
+        style="@style/Field.Body"/>
 
 </LinearLayout>

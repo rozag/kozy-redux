@@ -29,7 +29,7 @@ class NotesApplication : Application() {
         private const val PREFS_NAME = "notes"
         lateinit var prefs: Prefs
         lateinit var resProvider: ResProvider
-        lateinit var store: Store
+        lateinit var store: NotesStore
         lateinit var loadNotesActionCreator: ActionCreator
     }
 

@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.github.rozag.redux.notes.Action
 import com.github.rozag.redux.notes.BaseActivity
 import com.github.rozag.redux.notes.NotesApplication
-import com.github.rozag.redux.notes.Store
+import com.github.rozag.redux.notes.NotesStore
 import com.github.rozag.redux.notes.prefs.Prefs
 import com.github.rozag.redux.notes.screen.list.ListActivity
 
@@ -17,7 +17,7 @@ class SplashActivity : BaseActivity() {
     override val homeButtonEnabled: Boolean = false
 
     private val prefs: Prefs = NotesApplication.prefs
-    private val store: Store = NotesApplication.store
+    private val store: NotesStore = NotesApplication.store
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

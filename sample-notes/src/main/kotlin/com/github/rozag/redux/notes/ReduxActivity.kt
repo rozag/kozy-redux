@@ -4,7 +4,7 @@ import com.github.rozag.redux.base.ReduxSubscribableStore
 
 abstract class ReduxActivity : BaseActivity(), ReduxSubscribableStore.Subscriber<AppState> {
 
-    protected val store: Store = NotesApplication.store
+    protected val store: NotesStore = NotesApplication.store
 
     private lateinit var subscription: ReduxSubscribableStore.Subscription
 

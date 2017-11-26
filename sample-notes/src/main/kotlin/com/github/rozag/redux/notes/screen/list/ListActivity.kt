@@ -10,11 +10,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.View.*
 import android.widget.ProgressBar
 import com.github.rozag.redux.notes.*
+import com.github.rozag.redux.notes.router.RouterAction
 
 class ListActivity : ReduxActivity() {
 
     override val layoutResourceId = R.layout.activity_list
-    override val toolbarTitleId = R.string.app_name
+    override val toolbarTitleId = 0
     override val displayHomeAsUp = false
     override val homeButtonEnabled = false
 
@@ -27,6 +28,8 @@ class ListActivity : ReduxActivity() {
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var adapter: ListAdapter
+
+    private var isExiting = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +49,7 @@ class ListActivity : ReduxActivity() {
         recyclerView.adapter = adapter
 
         addNoteButton.setOnClickListener {
-            Snackbar.make(coordinatorLayout, "TODO", Snackbar.LENGTH_SHORT).show()
+            store.dispatch(RouterAction.Open.Edit())
         }
 
         loadNotesActionCreator.createAndDispatch()
@@ -54,10 +57,17 @@ class ListActivity : ReduxActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        isExiting = true
         store.dispatch(ListAction.TearDown())
     }
 
     override fun onNewState(state: AppState) {
+        super.onNewState(state)
+
+        if (isExiting) {
+            return
+        }
+
         val listState = state.listState
         when {
             listState.isLoading -> {

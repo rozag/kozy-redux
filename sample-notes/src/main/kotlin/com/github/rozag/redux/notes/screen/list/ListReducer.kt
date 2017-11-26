@@ -5,7 +5,7 @@ fun listReducer(state: ListState, action: ListAction): ListState = when (action)
     is ListAction.TearDown -> ListState.EMPTY
 }
 
-fun loadNotesReducer(state: ListState, action: ListAction.LoadNotes): ListState = when (action) {
+private fun loadNotesReducer(state: ListState, action: ListAction.LoadNotes): ListState = when (action) {
     is ListAction.LoadNotes.Started -> ListState(
             state.notes.isEmpty(),
             false,

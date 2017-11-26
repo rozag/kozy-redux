@@ -1,6 +1,7 @@
 package com.github.rozag.redux.notes.screen.edit
 
-import com.github.rozag.redux.notes.Action
+import com.github.rozag.redux.notes.NotesAction
 
-sealed class EditAction : Action.Screen() {
+sealed class EditAction : NotesAction.Screen() {
+    class TearDown : EditAction()
 }

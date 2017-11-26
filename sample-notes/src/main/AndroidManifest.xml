@@ -24,6 +24,8 @@
 
         <activity android:name=".screen.list.ListActivity"/>
 
+        <activity android:name=".screen.edit.EditActivity"/>
+
     </application>
 
 </manifest>

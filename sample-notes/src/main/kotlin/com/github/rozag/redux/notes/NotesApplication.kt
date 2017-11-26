@@ -18,6 +18,7 @@ import com.github.rozag.redux.notes.repo.FakeRemoteNotesRepo
 import com.github.rozag.redux.notes.repo.LocalNotesRepo
 import com.github.rozag.redux.notes.resources.AndroidResProvider
 import com.github.rozag.redux.notes.resources.ResProvider
+import com.github.rozag.redux.notes.router.Router
 import com.github.rozag.redux.notes.screen.list.LoadNotesActionCreator
 import com.github.rozag.redux.notes.timber.ReleaseTree
 import timber.log.Timber
@@ -30,6 +31,7 @@ class NotesApplication : Application() {
         lateinit var prefs: Prefs
         lateinit var resProvider: ResProvider
         lateinit var store: NotesStore
+        lateinit var router: Router
         lateinit var loadNotesActionCreator: ActionCreator
     }
 
@@ -93,6 +95,9 @@ class NotesApplication : Application() {
                         taskQueue = taskQueue
                 )
         )
+
+        // Initialize router
+        router = Router(store)
 
         // Initialize action creators
         loadNotesActionCreator = LoadNotesActionCreator(

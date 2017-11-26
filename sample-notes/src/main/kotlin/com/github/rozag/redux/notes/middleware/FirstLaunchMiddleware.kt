@@ -3,7 +3,7 @@ package com.github.rozag.redux.notes.middleware
 import com.github.rozag.kueue.Kueue
 import com.github.rozag.redux.core.ReduxMiddleware
 import com.github.rozag.redux.core.store.ReduxStore
-import com.github.rozag.redux.notes.Action
+import com.github.rozag.redux.notes.NotesAction
 import com.github.rozag.redux.notes.AppState
 import com.github.rozag.redux.notes.IdGenerator
 import com.github.rozag.redux.notes.R
@@ -17,12 +17,12 @@ class FirstLaunchMiddleware(
         private val resProvider: ResProvider,
         private val repo: NotesRepo,
         private val taskQueue: Kueue
-) : ReduxMiddleware<AppState, Action, ReduxStore<AppState, Action>>() {
+) : ReduxMiddleware<AppState, NotesAction, ReduxStore<AppState, NotesAction>>() {
 
-    override fun doBeforeDispatch(store: ReduxStore<AppState, Action>, action: Action) = Unit
+    override fun doBeforeDispatch(store: ReduxStore<AppState, NotesAction>, action: NotesAction) = Unit
 
-    override fun doAfterDispatch(store: ReduxStore<AppState, Action>, action: Action) {
-        if (action is Action.FirstLaunch.Started) {
+    override fun doAfterDispatch(store: ReduxStore<AppState, NotesAction>, action: NotesAction) {
+        if (action is NotesAction.FirstLaunch.Started) {
             taskQueue.fromCallable {
                 val notes = listOf(
                         Note(
@@ -44,7 +44,7 @@ class FirstLaunchMiddleware(
                 notes.forEach { note -> repo.addNote(note) }
                 notes
             }
-                    .onComplete { notes -> store.dispatch(Action.FirstLaunch.Complete(notes)) }
+                    .onComplete { notes -> store.dispatch(NotesAction.FirstLaunch.Complete(notes)) }
                     .onError { throwable -> Timber.e(throwable) }
                     .go()
         }

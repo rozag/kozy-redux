@@ -1,15 +1,15 @@
 package com.github.rozag.redux.notes.screen.splash
 
-import android.content.Intent
 import android.os.Bundle
-import com.github.rozag.redux.notes.Action
-import com.github.rozag.redux.notes.BaseActivity
+import com.github.rozag.redux.notes.AppState
+import com.github.rozag.redux.notes.NotesAction
 import com.github.rozag.redux.notes.NotesApplication
-import com.github.rozag.redux.notes.NotesStore
+import com.github.rozag.redux.notes.ReduxActivity
 import com.github.rozag.redux.notes.prefs.Prefs
-import com.github.rozag.redux.notes.screen.list.ListActivity
+import com.github.rozag.redux.notes.router.RouterAction
+import com.github.rozag.redux.notes.router.RouterState
 
-class SplashActivity : BaseActivity() {
+class SplashActivity : ReduxActivity() {
 
     override val layoutResourceId: Int = 0
     override val toolbarTitleId: Int = 0
@@ -17,7 +17,6 @@ class SplashActivity : BaseActivity() {
     override val homeButtonEnabled: Boolean = false
 
     private val prefs: Prefs = NotesApplication.prefs
-    private val store: NotesStore = NotesApplication.store
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,12 +24,18 @@ class SplashActivity : BaseActivity() {
         // First launch stuff
         if (prefs.isFirstLaunch()) {
             prefs.onFirstLaunchPerformed()
-            store.dispatch(Action.FirstLaunch.Started())
+            store.dispatch(NotesAction.FirstLaunch.Started())
         }
 
         // Start the notes list screen
-        startActivity(Intent(this, ListActivity::class.java))
-        finish()
+        store.dispatch(RouterAction.Open.List())
+    }
+
+    override fun onNewState(state: AppState) {
+        super.onNewState(state)
+        if (state.routerState.currentScreen != RouterState.Screen.None) {
+            finish()
+        }
     }
 
 }

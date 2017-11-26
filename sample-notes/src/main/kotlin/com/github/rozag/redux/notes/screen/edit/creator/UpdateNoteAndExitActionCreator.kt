@@ -4,10 +4,11 @@ import com.github.rozag.kueue.Kueue
 import com.github.rozag.redux.notes.NotesStore
 import com.github.rozag.redux.notes.model.Note
 import com.github.rozag.redux.notes.repo.NotesRepo
+import com.github.rozag.redux.notes.router.RouterAction
 import com.github.rozag.redux.notes.screen.edit.EditAction
 import timber.log.Timber
 
-class UpdateNoteActionCreator(
+class UpdateNoteAndExitActionCreator(
         private val store: NotesStore,
         private val repo: NotesRepo,
         private val taskQueue: Kueue
@@ -20,7 +21,11 @@ class UpdateNoteActionCreator(
             repo.updateNote(updatedNote)
             updatedNote
         }
-                .onComplete { note -> store.dispatch(EditAction.NoteUpdated(note)) }
+                .onComplete { note ->
+                    store.dispatch(EditAction.NoteUpdated(note))
+                    store.dispatch(EditAction.TearDown())
+                    store.dispatch(RouterAction.Closed.Edit())
+                }
                 .onError { throwable -> Timber.e(throwable) }
                 .go()
     }

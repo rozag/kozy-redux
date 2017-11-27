@@ -20,6 +20,7 @@ import com.github.rozag.redux.notes.resources.AndroidResProvider
 import com.github.rozag.redux.notes.resources.ResProvider
 import com.github.rozag.redux.notes.router.Router
 import com.github.rozag.redux.notes.screen.edit.creator.UpdateNoteAndExitActionCreator
+import com.github.rozag.redux.notes.screen.list.creator.DeleteNoteActionCreator
 import com.github.rozag.redux.notes.screen.list.creator.LoadNotesActionCreator
 import com.github.rozag.redux.notes.screen.list.creator.NewNoteActionCreator
 import com.github.rozag.redux.notes.timber.ReleaseTree
@@ -28,7 +29,6 @@ import java.util.concurrent.Executors
 
 class NotesApplication : Application() {
 
-    // TODO: notes deletion
     // TODO: todo-notes
 
     companion object {
@@ -44,6 +44,7 @@ class NotesApplication : Application() {
         // List screen action creators
         lateinit var loadNotesActionCreator: LoadNotesActionCreator
         lateinit var newNoteActionCreator: NewNoteActionCreator
+        lateinit var deleteNoteActionCreator: DeleteNoteActionCreator
 
         // Edit screen action creators
         lateinit var updateNoteAndExitActionCreator: UpdateNoteAndExitActionCreator
@@ -118,12 +119,17 @@ class NotesApplication : Application() {
 
         // Initialize list screen action creators
         loadNotesActionCreator = LoadNotesActionCreator(
-                queue = taskQueue,
                 store = store,
-                repo = notesRepo
+                repo = notesRepo,
+                taskQueue = taskQueue
         )
         newNoteActionCreator = NewNoteActionCreator(
                 idGenerator = idGenerator,
+                store = store,
+                repo = notesRepo,
+                taskQueue = taskQueue
+        )
+        deleteNoteActionCreator = DeleteNoteActionCreator(
                 store = store,
                 repo = notesRepo,
                 taskQueue = taskQueue

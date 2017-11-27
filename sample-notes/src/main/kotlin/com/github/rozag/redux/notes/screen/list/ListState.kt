@@ -5,9 +5,10 @@ import com.github.rozag.redux.notes.model.Note
 data class ListState(
         val isLoading: Boolean,
         val isError: Boolean,
-        val notes: List<Note>
+        val notes: List<Note>,
+        val noteToDelete: Note
 ) {
     companion object {
-        val EMPTY: ListState = ListState(true, false, emptyList())
+        val EMPTY: ListState = ListState(true, false, emptyList(), Note.EMPTY)
     }
 }

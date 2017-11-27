@@ -25,12 +25,22 @@ fun rootReducer(state: AppState, action: NotesAction): AppState = when (action) 
 fun firstLaunchReducer(state: AppState, action: NotesAction.FirstLaunch): AppState = when (action) {
     is NotesAction.FirstLaunch.Started -> AppState(
             state.routerState,
-            ListState(true, false, state.listState.notes),
+            ListState(
+                    true,
+                    false,
+                    state.listState.notes,
+                    state.listState.noteToDelete
+            ),
             state.editState
     )
     is NotesAction.FirstLaunch.Complete -> AppState(
             state.routerState,
-            ListState(false, false, action.notes),
+            ListState(
+                    false,
+                    false,
+                    action.notes,
+                    state.listState.noteToDelete
+            ),
             state.editState
     )
 }

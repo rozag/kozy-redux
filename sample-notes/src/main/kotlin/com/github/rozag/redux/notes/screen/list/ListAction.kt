@@ -17,6 +17,10 @@ sealed class ListAction : NotesAction.Screen() {
 
     data class Edit(val note: Note) : ListAction()
 
+    data class DismissNote(val index: Int) : ListAction()
+
+    class NoteDeleted : ListAction()
+
     class TearDown : ListAction()
 
 }

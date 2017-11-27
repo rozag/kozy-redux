@@ -10,7 +10,8 @@ fun editReducer(state: AppState, action: EditAction): AppState = when (action) {
             ListState(
                     state.listState.isLoading,
                     state.listState.isError,
-                    updateNoteInList(state.listState.notes, action.note)
+                    updateNoteInList(state.listState.notes, action.note),
+                    state.listState.noteToDelete
             ),
             EditState.EMPTY
     )

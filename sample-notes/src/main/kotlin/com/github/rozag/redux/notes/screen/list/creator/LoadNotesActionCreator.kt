@@ -7,14 +7,14 @@ import com.github.rozag.redux.notes.screen.list.ListAction
 import timber.log.Timber
 
 class LoadNotesActionCreator(
-        private val queue: Kueue,
         private val store: NotesStore,
-        private val repo: NotesRepo
+        private val repo: NotesRepo,
+        private val taskQueue: Kueue
 ) {
 
     fun createAndDispatch() {
         store.dispatch(ListAction.LoadNotes.Started())
-        queue.fromCallable { repo.getNotes() }
+        taskQueue.fromCallable { repo.getNotes() }
                 .onComplete { notes ->
                     store.dispatch(ListAction.LoadNotes.Complete(notes))
                 }

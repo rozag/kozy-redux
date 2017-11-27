@@ -12,6 +12,11 @@
     <string name="empty_title">(empty title)</string>
     <string name="empty_body">(empty body)</string>
 
+    <string name="msg_error_occurred">Error occurred</string>
+    <string name="msg_note_deleted">Note deleted</string>
+
+    <string name="undo">Undo</string>
+
     <string name="edit_note">Edit note</string>
     <string name="hint_title">Note\'s title</string>
     <string name="hint_body">Note\'s body</string>

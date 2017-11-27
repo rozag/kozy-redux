@@ -16,6 +16,7 @@ import com.github.rozag.redux.notes.R
 import com.github.rozag.redux.notes.ReduxActivity
 import com.github.rozag.redux.notes.resources.ResProvider
 import com.github.rozag.redux.notes.router.RouterAction
+import com.github.rozag.redux.notes.router.Screen
 
 class ListActivity : ReduxActivity() {
 
@@ -52,7 +53,7 @@ class ListActivity : ReduxActivity() {
         recyclerView.addItemDecoration(StatusBarMarginItemDecoration(resources))
         adapter = ListAdapter(resProvider) { note ->
             store.dispatch(ListAction.Edit(note))
-            store.dispatch(RouterAction.Open.Edit())
+            store.dispatch(RouterAction.Open(Screen.EDIT))
         }
         recyclerView.adapter = adapter
 
@@ -67,7 +68,7 @@ class ListActivity : ReduxActivity() {
         super.onBackPressed()
         isExiting = true
         store.dispatch(ListAction.TearDown())
-        store.dispatch(RouterAction.Closed.List())
+        store.dispatch(RouterAction.Closed(Screen.LIST))
     }
 
     override fun onNewState(state: AppState) {

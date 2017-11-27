@@ -7,7 +7,7 @@ import com.github.rozag.redux.notes.NotesApplication
 import com.github.rozag.redux.notes.ReduxActivity
 import com.github.rozag.redux.notes.prefs.Prefs
 import com.github.rozag.redux.notes.router.RouterAction
-import com.github.rozag.redux.notes.router.RouterState
+import com.github.rozag.redux.notes.router.Screen
 
 class SplashActivity : ReduxActivity() {
 
@@ -28,12 +28,12 @@ class SplashActivity : ReduxActivity() {
         }
 
         // Start the notes list screen
-        store.dispatch(RouterAction.Open.List())
+        store.dispatch(RouterAction.Open(Screen.LIST))
     }
 
     override fun onNewState(state: AppState) {
         super.onNewState(state)
-        if (state.routerState.currentScreen != RouterState.Screen.NONE) {
+        if (state.routerState.currentScreen != Screen.NONE) {
             finish()
         }
     }

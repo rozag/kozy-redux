@@ -8,17 +8,17 @@ import com.github.rozag.redux.notes.start
 
 class Router(private val store: NotesStore) {
 
-    fun showScreenIfNeeded(activityContext: Context, screen: RouterState.Screen) {
+    fun showScreenIfNeeded(activityContext: Context, screen: Screen) {
         when (screen) {
-            RouterState.Screen.LIST -> {
+            Screen.LIST -> {
                 activityContext.start(ListActivity::class.java)
-                store.dispatch(RouterAction.Shown.List())
+                store.dispatch(RouterAction.Shown(Screen.LIST))
             }
-            RouterState.Screen.EDIT -> {
+            Screen.EDIT -> {
                 activityContext.start(EditActivity::class.java)
-                store.dispatch(RouterAction.Shown.Edit())
+                store.dispatch(RouterAction.Shown(Screen.EDIT))
             }
-            RouterState.Screen.NONE -> Unit
+            Screen.NONE -> Unit
         }
     }
 

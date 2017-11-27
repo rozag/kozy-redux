@@ -16,6 +16,8 @@ class EditActivity : ReduxActivity() {
     private lateinit var titleEditText: EditText
     private lateinit var bodyEditText: EditText
 
+    private var isExiting = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,6 +46,7 @@ class EditActivity : ReduxActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        isExiting = true
         updateNoteAndExitActionCreator.createAndDispatch(
                 title = titleEditText.text.toString().trim(),
                 body = bodyEditText.text.toString().trim()
@@ -52,6 +55,9 @@ class EditActivity : ReduxActivity() {
 
     override fun onNewState(state: AppState) {
         super.onNewState(state)
+        if (isExiting) {
+            return
+        }
         val note = state.editState.note
         titleEditText.setText(note.title)
         bodyEditText.setText(note.body)

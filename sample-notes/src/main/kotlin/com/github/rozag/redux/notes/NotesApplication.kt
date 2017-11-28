@@ -13,8 +13,6 @@ import com.github.rozag.redux.notes.middleware.FirstLaunchMiddleware
 import com.github.rozag.redux.notes.middleware.LoggingMiddleware
 import com.github.rozag.redux.notes.prefs.AndroidPrefs
 import com.github.rozag.redux.notes.prefs.Prefs
-import com.github.rozag.redux.notes.repo.CompositeNotesRepo
-import com.github.rozag.redux.notes.repo.FakeRemoteNotesRepo
 import com.github.rozag.redux.notes.repo.LocalNotesRepo
 import com.github.rozag.redux.notes.resources.AndroidResProvider
 import com.github.rozag.redux.notes.resources.ResProvider
@@ -29,6 +27,8 @@ import java.util.concurrent.Executors
 
 class NotesApplication : Application() {
 
+    // TODO: add callbacks to the repo
+    // TODO: logging without timber?
     // TODO: todo-notes
 
     companion object {
@@ -74,12 +74,7 @@ class NotesApplication : Application() {
                 DB_NAME
         ).build()
         val notesDao = notesDatabase.notesDao()
-        val localNotesRepo = LocalNotesRepo(notesDao)
-        val remoteNotesRepo = FakeRemoteNotesRepo(sleepMillis = 3000)
-        val notesRepo = CompositeNotesRepo(
-                localRepo = localNotesRepo,
-                remoteRepo = remoteNotesRepo
-        )
+        val notesRepo = LocalNotesRepo(notesDao)
 
         // Initialize id generator
         val idGenerator = IdGenerator()

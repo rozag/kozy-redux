@@ -11,6 +11,9 @@ interface NotesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addNote(note: NoteEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addNotes(notes: List<NoteEntity>)
+
     @Update
     fun updateNote(note: NoteEntity)
 

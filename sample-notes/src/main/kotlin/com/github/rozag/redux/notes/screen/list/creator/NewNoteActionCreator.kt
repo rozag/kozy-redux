@@ -1,6 +1,5 @@
 package com.github.rozag.redux.notes.screen.list.creator
 
-import com.github.rozag.kueue.Kueue
 import com.github.rozag.redux.notes.IdGenerator
 import com.github.rozag.redux.notes.NotesStore
 import com.github.rozag.redux.notes.model.Note
@@ -13,23 +12,19 @@ import timber.log.Timber
 class NewNoteActionCreator(
         private val idGenerator: IdGenerator,
         private val store: NotesStore,
-        private val repo: NotesRepo,
-        private val taskQueue: Kueue
+        private val repo: NotesRepo
 ) {
 
     fun createAndDispatch() {
-        taskQueue.fromCallable {
-            val note = Note(idGenerator.generateId(), "", "")
-            repo.addNote(note)
-            note
-        }
-                .onComplete { note ->
+        val newNote = Note(idGenerator.generateId(), "", "")
+        repo.addNote(
+                note = newNote,
+                onComplete = { note ->
                     store.dispatch(ListAction.Create(note))
                     store.dispatch(RouterAction.Open(Screen.EDIT))
-                }
-                .onError { throwable -> Timber.e(throwable) }
-                .go()
-
+                },
+                onError = { throwable -> Timber.e(throwable) }
+        )
     }
 
 }

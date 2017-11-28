@@ -27,9 +27,8 @@ import java.util.concurrent.Executors
 
 class NotesApplication : Application() {
 
-    // TODO: add callbacks to the repo
-    // TODO: logging without timber?
     // TODO: todo-notes
+    // TODO: update first launch notes
 
     companion object {
         private const val PREFS_NAME = "notes"
@@ -67,6 +66,14 @@ class NotesApplication : Application() {
         // Initialize resources provider
         resProvider = AndroidResProvider(this)
 
+        // Initialize task queues
+        val mainThreadExecutor = MainThreadExecutor()
+        val diskIoThreadExecutor = Executors.newSingleThreadExecutor()
+        val taskQueue = Kueue(
+                workerExecutor = diskIoThreadExecutor,
+                callbackExecutor = mainThreadExecutor
+        )
+
         // Initialize repositories
         val notesDatabase = Room.databaseBuilder(
                 this,
@@ -74,20 +81,13 @@ class NotesApplication : Application() {
                 DB_NAME
         ).build()
         val notesDao = notesDatabase.notesDao()
-        val notesRepo = LocalNotesRepo(notesDao)
+        val notesRepo = LocalNotesRepo(
+                notesDao = notesDao,
+                taskQueue = taskQueue
+        )
 
         // Initialize id generator
         val idGenerator = IdGenerator()
-
-        // Initialize executors
-        val mainThreadExecutor = MainThreadExecutor()
-        val diskIoThreadExecutor = Executors.newSingleThreadExecutor()
-
-        // Initialize task queues
-        val taskQueue = Kueue(
-                workerExecutor = diskIoThreadExecutor,
-                callbackExecutor = mainThreadExecutor
-        )
 
         // Initialize the store
         store = SubscribableBufferedStore(
@@ -104,8 +104,7 @@ class NotesApplication : Application() {
                 FirstLaunchMiddleware(
                         idGenerator = idGenerator,
                         resProvider = resProvider,
-                        repo = notesRepo,
-                        taskQueue = taskQueue
+                        repo = notesRepo
                 )
         )
 
@@ -115,26 +114,22 @@ class NotesApplication : Application() {
         // Initialize list screen action creators
         loadNotesActionCreator = LoadNotesActionCreator(
                 store = store,
-                repo = notesRepo,
-                taskQueue = taskQueue
+                repo = notesRepo
         )
         newNoteActionCreator = NewNoteActionCreator(
                 idGenerator = idGenerator,
                 store = store,
-                repo = notesRepo,
-                taskQueue = taskQueue
+                repo = notesRepo
         )
         deleteNoteActionCreator = DeleteNoteActionCreator(
                 store = store,
-                repo = notesRepo,
-                taskQueue = taskQueue
+                repo = notesRepo
         )
 
         // Initialize edit screen action creators
         updateNoteAndExitActionCreator = UpdateNoteAndExitActionCreator(
                 store = store,
-                repo = notesRepo,
-                taskQueue = taskQueue
+                repo = notesRepo
         )
     }
 

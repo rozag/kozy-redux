@@ -27,6 +27,7 @@ import java.util.concurrent.Executors
 
 class NotesApplication : Application() {
 
+    // TODO: keyboard not shown automatically
     // TODO: todo-notes
     // TODO: update first launch notes
 

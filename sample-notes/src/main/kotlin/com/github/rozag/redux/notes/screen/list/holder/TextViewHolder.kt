@@ -21,11 +21,13 @@ class TextViewHolder(
         } else {
             note.title
         }
-        bodyTextView.text = if (note.body.isEmpty()) {
-            resProvider.getString(R.string.empty_body)
-        } else {
-            note.body
+        bodyTextView.text = when (note) {
+            is Note.Text -> if (note.body.isEmpty()) {
+                resProvider.getString(R.string.empty_body)
+            } else {
+                note.body
+            }
+            is Note.Todo -> note.itemsAsBody
         }
     }
-
 }

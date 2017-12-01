@@ -15,7 +15,7 @@ class UpdateNoteAndExitActionCreator(
 
     fun createAndDispatch(title: String, body: String) {
         val oldNote = store.getState().editState.note
-        val updatedNote = Note(oldNote.id, title, body)
+        val updatedNote = Note.Text(oldNote.id, title, body)
         repo.updateNote(
                 note = updatedNote,
                 onComplete = { note ->

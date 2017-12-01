@@ -3,6 +3,7 @@ package com.github.rozag.redux.notes.screen.edit
 import android.os.Bundle
 import android.widget.EditText
 import com.github.rozag.redux.notes.*
+import com.github.rozag.redux.notes.model.Note
 
 class EditActivity : ReduxActivity() {
 
@@ -60,7 +61,10 @@ class EditActivity : ReduxActivity() {
         }
         val note = state.editState.note
         titleEditText.setText(note.title)
-        bodyEditText.setText(note.body)
+        bodyEditText.setText(when (note) {
+            is Note.Text -> note.body
+            is Note.Todo -> note.itemsAsBody
+        })
     }
 
 }

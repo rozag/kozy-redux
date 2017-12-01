@@ -22,17 +22,17 @@ class FirstLaunchMiddleware(
     override fun doAfterDispatch(store: ReduxStore<AppState, NotesAction>, action: NotesAction) {
         if (action is NotesAction.FirstLaunch.Started) {
             val notes = listOf(
-                    Note(
+                    Note.Text(
                             id = idGenerator.generateId(),
                             title = resProvider.getString(R.string.initial_note_title_0),
                             body = resProvider.getString(R.string.initial_note_body_0)
                     ),
-                    Note(
+                    Note.Text(
                             id = idGenerator.generateId(),
                             title = resProvider.getString(R.string.initial_note_title_1),
                             body = resProvider.getString(R.string.initial_note_body_1)
                     ),
-                    Note(
+                    Note.Text(
                             id = idGenerator.generateId(),
                             title = resProvider.getString(R.string.initial_note_title_2),
                             body = resProvider.getString(R.string.initial_note_body_2)

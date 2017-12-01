@@ -91,8 +91,8 @@ class LocalNotesRepo(
 }
 
 private fun entityFromNote(note: Note) = when (note) {
-    is Note.Text -> NoteEntity(note.id, note.title, note.body, isTodo = 0)
-    is Note.Todo -> NoteEntity(note.id, note.title, body = "", isTodo = 1)
+    is Note.Text -> NoteEntity(note.id, note.title, note.body, todo = 0)
+    is Note.Todo -> NoteEntity(note.id, note.title, body = "", todo = 1)
 }
 
 private fun itemFromEntity(entity: TodoItemEntity) = TodoItem(

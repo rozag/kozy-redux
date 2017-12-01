@@ -16,7 +16,7 @@ class NewNoteActionCreator(
 ) {
 
     fun createAndDispatch() {
-        val newNote = Note(idGenerator.generateId(), "", "")
+        val newNote = Note.Text(idGenerator.generateId(), "", "")
         repo.addNote(
                 note = newNote,
                 onComplete = { note ->

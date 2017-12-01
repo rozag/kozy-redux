@@ -32,5 +32,5 @@ data class NoteEntity(
                 name = DbContract.Table.Notes.Column.isTodo,
                 typeAffinity = ColumnInfo.INTEGER
         )
-        var isTodo: Int = 0
+        var todo: Int = 0
 )

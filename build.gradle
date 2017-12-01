@@ -17,8 +17,8 @@ buildscript {
         kotlinVersion = "1.1.60"
 
         // Java compatibility version
-        sourceCompatJavaVersion = JavaVersion.VERSION_1_7
-        targetCompatJavaVersion = JavaVersion.VERSION_1_7
+        sourceCompatJavaVersion = JavaVersion.VERSION_1_8
+        targetCompatJavaVersion = JavaVersion.VERSION_1_8
 
         // Publishing stuff
         publishGroupId = "com.github.rozag"
@@ -33,7 +33,7 @@ buildscript {
         espressoVersion = "2.2.2"
 
         // Libraries versions
-        supportLibraryVersion = "27.0.1"
+        supportLibraryVersion = "27.0.2"
         timberVersion = "4.6.0"
         roomVersion = "1.0.0"
         kueueVersion = "1.0"
@@ -45,7 +45,7 @@ buildscript {
     }
 
     dependencies {
-        classpath "com.android.tools.build:gradle:3.0.0"
+        classpath "com.android.tools.build:gradle:3.0.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}"
         classpath "com.novoda:bintray-release:0.7.0"
     }

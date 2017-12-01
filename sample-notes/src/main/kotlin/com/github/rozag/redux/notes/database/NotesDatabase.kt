@@ -4,10 +4,11 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase
 
 @Database(
-        entities = arrayOf(NoteEntity::class),
+        entities = arrayOf(NoteEntity::class, TodoItemEntity::class),
         version = DbContract.version,
         exportSchema = true
 )
 abstract class NotesDatabase : RoomDatabase() {
     abstract fun notesDao(): NotesDao
+    abstract fun todoItemsDao(): TodoItemsDao
 }

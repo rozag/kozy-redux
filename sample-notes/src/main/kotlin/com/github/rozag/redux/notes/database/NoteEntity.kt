@@ -12,5 +12,6 @@ import android.arch.persistence.room.PrimaryKey
 data class NoteEntity(
         @PrimaryKey @ColumnInfo(name = DbContract.Table.Notes.Column.id) var id: String = "",
         @ColumnInfo(name = DbContract.Table.Notes.Column.title) var title: String = "",
-        @ColumnInfo(name = DbContract.Table.Notes.Column.body) var body: String = ""
+        @ColumnInfo(name = DbContract.Table.Notes.Column.body) var body: String = "",
+        @ColumnInfo(name = DbContract.Table.Notes.Column.isTodo) var isTodo: Boolean = false
 )

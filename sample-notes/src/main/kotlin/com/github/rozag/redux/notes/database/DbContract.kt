@@ -12,6 +12,7 @@ object DbContract {
                 const val id = "id"
                 const val title = "title"
                 const val body = "body"
+                const val isTodo = "is_todo"
             }
         }
 

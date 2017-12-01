@@ -13,8 +13,27 @@ import android.arch.persistence.room.*
         ))
 )
 data class TodoItemEntity(
-        @PrimaryKey @ColumnInfo(name = DbContract.Table.TodoItems.Column.id) var id: String = "",
-        @ColumnInfo(name = DbContract.Table.TodoItems.Column.noteId) var noteId: String = "",
-        @ColumnInfo(name = DbContract.Table.TodoItems.Column.text) var text: String = "",
-        @ColumnInfo(name = DbContract.Table.TodoItems.Column.done) var done: Boolean = false
+        @PrimaryKey @ColumnInfo(
+                name = DbContract.Table.TodoItems.Column.id,
+                typeAffinity = ColumnInfo.TEXT
+        )
+        var id: String = "",
+
+        @ColumnInfo(
+                name = DbContract.Table.TodoItems.Column.noteId,
+                typeAffinity = ColumnInfo.TEXT
+        )
+        var noteId: String = "",
+
+        @ColumnInfo(
+                name = DbContract.Table.TodoItems.Column.text,
+                typeAffinity = ColumnInfo.TEXT
+        )
+        var text: String = "",
+
+        @ColumnInfo(
+                name = DbContract.Table.TodoItems.Column.done,
+                typeAffinity = ColumnInfo.INTEGER
+        )
+        var done: Int = 0
 )

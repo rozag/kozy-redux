@@ -10,8 +10,27 @@ import android.arch.persistence.room.PrimaryKey
         indices = arrayOf(Index(value = DbContract.Table.Notes.Column.id, unique = true))
 )
 data class NoteEntity(
-        @PrimaryKey @ColumnInfo(name = DbContract.Table.Notes.Column.id) var id: String = "",
-        @ColumnInfo(name = DbContract.Table.Notes.Column.title) var title: String = "",
-        @ColumnInfo(name = DbContract.Table.Notes.Column.body) var body: String = "",
-        @ColumnInfo(name = DbContract.Table.Notes.Column.isTodo) var isTodo: Boolean = false
+        @PrimaryKey @ColumnInfo(
+                name = DbContract.Table.Notes.Column.id,
+                typeAffinity = ColumnInfo.TEXT
+        )
+        var id: String = "",
+
+        @ColumnInfo(
+                name = DbContract.Table.Notes.Column.title,
+                typeAffinity = ColumnInfo.TEXT
+        )
+        var title: String = "",
+
+        @ColumnInfo(
+                name = DbContract.Table.Notes.Column.body,
+                typeAffinity = ColumnInfo.TEXT
+        )
+        var body: String = "",
+
+        @ColumnInfo(
+                name = DbContract.Table.Notes.Column.isTodo,
+                typeAffinity = ColumnInfo.INTEGER
+        )
+        var isTodo: Int = 0
 )

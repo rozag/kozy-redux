@@ -15,7 +15,10 @@ interface TodoItemsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addTodoItem(todoItem: TodoItemEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addTodoItems(todoItems: List<TodoItemEntity>)
+
     @Update
-    fun updateTodoItem(todoItem: TodoItemEntity)
+    fun updateTodoItems(todoItems: List<TodoItemEntity>)
 
 }

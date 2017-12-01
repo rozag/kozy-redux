@@ -20,6 +20,17 @@ sealed class Note(open val id: String, open val title: String) {
         companion object {
             val EMPTY: Todo = Todo("", "", emptyList())
         }
+
+        // TODO: remove
+        val itemsAsBody: String by lazy {
+            val sb = StringBuilder()
+            sb.append("Todo items [\n")
+            items.forEach { item ->
+                sb.append(item).append('\n')
+            }
+            sb.append(']')
+            sb.toString()
+        }
     }
 
 }

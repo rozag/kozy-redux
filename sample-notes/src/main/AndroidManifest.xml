@@ -24,7 +24,9 @@
 
         <activity android:name=".screen.list.ListActivity"/>
 
-        <activity android:name=".screen.edit.EditActivity"/>
+        <activity
+            android:name=".screen.edit.EditActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
 
     </application>
 

@@ -3,10 +3,12 @@ package com.github.rozag.redux.notes.repo
 import com.github.rozag.kueue.Kueue
 import com.github.rozag.redux.notes.database.NoteEntity
 import com.github.rozag.redux.notes.database.NotesDao
+import com.github.rozag.redux.notes.database.TodoItemsDao
 import com.github.rozag.redux.notes.model.Note
 
 class LocalNotesRepo(
         private val notesDao: NotesDao,
+        private val todoItemsDao: TodoItemsDao,
         private val taskQueue: Kueue
 ) : NotesRepo {
 

@@ -1,32 +1,25 @@
 package com.github.rozag.redux.notes.model
 
-data class Note(val id: String, val title: String, val body: String) {
+sealed class Note(open val id: String, open val title: String) {
 
-    companion object {
-        val EMPTY: Note = Note("", "", "")
+    data class Text(
+            override val id: String,
+            override val title: String,
+            val body: String
+    ) : Note(id, title) {
+        companion object {
+            val EMPTY: Text = Text("", "", "")
+        }
     }
 
-    override fun toString(): String = if (this == Note.EMPTY) {
-        "EMPTY"
-    } else {
-        "Note" +
-                "(" +
-                "title=${titleToString()}, " +
-                "body=${bodyToString()}" +
-                ")"
-    }
-
-    private fun titleToString(): String = if (title.isEmpty()) {
-        "EMPTY"
-    } else {
-        "'$title'"
-    }
-
-    private fun bodyToString(): String = if (body.isEmpty()) {
-        "EMPTY"
-    } else {
-        val printableBody = body.replace("\n", " ")
-        "'$printableBody'"
+    data class Todo(
+            override val id: String,
+            override val title: String,
+            val items: List<TodoItem>
+    ) : Note(id, title) {
+        companion object {
+            val EMPTY: Todo = Todo("", "", emptyList())
+        }
     }
 
 }

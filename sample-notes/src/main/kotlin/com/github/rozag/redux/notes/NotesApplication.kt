@@ -80,9 +80,9 @@ class NotesApplication : Application() {
                 NotesDatabase::class.java,
                 DbContract.name
         ).build()
-        val notesDao = notesDatabase.notesDao()
         val notesRepo = LocalNotesRepo(
-                notesDao = notesDao,
+                notesDao = notesDatabase.notesDao(),
+                todoItemsDao = notesDatabase.todoItemsDao(),
                 taskQueue = taskQueue
         )
 

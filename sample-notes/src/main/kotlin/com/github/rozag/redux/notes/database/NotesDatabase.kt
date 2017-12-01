@@ -5,7 +5,7 @@ import android.arch.persistence.room.RoomDatabase
 
 @Database(
         entities = arrayOf(NoteEntity::class),
-        version = DB_VERSION,
+        version = DbContract.version,
         exportSchema = true
 )
 abstract class NotesDatabase : RoomDatabase() {

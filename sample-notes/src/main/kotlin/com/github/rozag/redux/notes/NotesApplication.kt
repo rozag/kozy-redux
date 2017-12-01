@@ -7,7 +7,7 @@ import android.util.Log
 import com.github.rozag.kueue.Kueue
 import com.github.rozag.kueue.android.MainThreadExecutor
 import com.github.rozag.redux.base.SubscribableBufferedStore
-import com.github.rozag.redux.notes.database.DB_NAME
+import com.github.rozag.redux.notes.database.DbContract
 import com.github.rozag.redux.notes.database.NotesDatabase
 import com.github.rozag.redux.notes.middleware.FirstLaunchMiddleware
 import com.github.rozag.redux.notes.middleware.LoggingMiddleware
@@ -78,7 +78,7 @@ class NotesApplication : Application() {
         val notesDatabase = Room.databaseBuilder(
                 this,
                 NotesDatabase::class.java,
-                DB_NAME
+                DbContract.name
         ).build()
         val notesDao = notesDatabase.notesDao()
         val notesRepo = LocalNotesRepo(

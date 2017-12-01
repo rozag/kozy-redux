@@ -6,11 +6,11 @@ import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 
 @Entity(
-        tableName = TABLE_NOTES,
-        indices = arrayOf(Index(value = COLUMN_ID, unique = true))
+        tableName = DbContract.Table.Notes.name,
+        indices = arrayOf(Index(value = DbContract.Table.Notes.Column.id, unique = true))
 )
 data class NoteEntity(
-        @PrimaryKey @ColumnInfo(name = COLUMN_ID) var id: String = "",
-        @ColumnInfo(name = COLUMN_TITLE) var title: String = "",
-        @ColumnInfo(name = COLUMN_BODY) var body: String = ""
+        @PrimaryKey @ColumnInfo(name = DbContract.Table.Notes.Column.id) var id: String = "",
+        @ColumnInfo(name = DbContract.Table.Notes.Column.title) var title: String = "",
+        @ColumnInfo(name = DbContract.Table.Notes.Column.body) var body: String = ""
 )

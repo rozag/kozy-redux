@@ -5,7 +5,7 @@ import android.arch.persistence.room.*
 @Dao
 interface NotesDao {
 
-    @Query(value = "SELECT * FROM $TABLE_NOTES")
+    @Query(value = "SELECT * FROM ${DbContract.Table.Notes.name}")
     fun getNotes(): List<NoteEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
